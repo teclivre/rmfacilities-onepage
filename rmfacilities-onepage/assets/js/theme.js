@@ -53,7 +53,7 @@
 		});
 	});
 
-	const sectionIds = ['inicio', 'sobre', 'resultados', 'servicos', 'contato', 'blog'];
+	const sectionIds = ['inicio', 'sobre', 'resultados', 'porque', 'servicos', 'contato', 'faq', 'depoimentos', 'blog'];
 	const sections = sectionIds
 		.map(function (id) {
 			return document.getElementById(id);
@@ -97,7 +97,7 @@
 		});
 	}, observerOptions);
 
-	const animatableElements = document.querySelectorAll('.card, .post-card, .section h2, .section h3, .btn, .highlight-box, .trust-item, .logo-wall span, .testimonial-card');
+	const animatableElements = document.querySelectorAll('.card, .post-card, .section h2, .section h3, .btn, .highlight-box, .trust-item, .logo-wall span, .testimonial-card, .why-item, .faq-item');
 	animatableElements.forEach(function (element) {
 		if (!element.classList.contains('in-viewport')) {
 			observer.observe(element);
@@ -131,4 +131,18 @@
 	}
 
 	setActiveMenuLink();
+
+	// Accordion FAQ
+	document.querySelectorAll('.faq-question').forEach(function (question) {
+		question.addEventListener('click', function () {
+			const item = this.closest('.faq-item');
+			const isOpen = item.classList.contains('open');
+			document.querySelectorAll('.faq-item.open').forEach(function (openItem) {
+				openItem.classList.remove('open');
+			});
+			if (!isOpen) {
+				item.classList.add('open');
+			}
+		});
+	});
 })();

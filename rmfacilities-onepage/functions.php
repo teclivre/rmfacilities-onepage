@@ -80,10 +80,29 @@ function rmf_primary_menu_fallback() {
 	echo '<ul id="primary-menu" class="menu">';
 	echo '<li><a href="' . esc_url( home_url( '/#inicio' ) ) . '">' . esc_html__( 'Inicio', 'rmfacilities-onepage' ) . '</a></li>';
 	echo '<li><a href="' . esc_url( home_url( '/#sobre' ) ) . '">' . esc_html__( 'Sobre', 'rmfacilities-onepage' ) . '</a></li>';
+	echo '<li><a href="' . esc_url( home_url( '/#porque' ) ) . '">' . esc_html__( 'Diferenciais', 'rmfacilities-onepage' ) . '</a></li>';
 	echo '<li><a href="' . esc_url( home_url( '/#servicos' ) ) . '">' . esc_html__( 'Servicos', 'rmfacilities-onepage' ) . '</a></li>';
 	echo '<li><a href="' . esc_url( home_url( '/#contato' ) ) . '">' . esc_html__( 'Contato', 'rmfacilities-onepage' ) . '</a></li>';
+	echo '<li><a href="' . esc_url( home_url( '/#faq' ) ) . '">' . esc_html__( 'FAQ', 'rmfacilities-onepage' ) . '</a></li>';
 	echo '<li><a href="' . esc_url( home_url( '/#blog' ) ) . '">' . esc_html__( 'Artigos', 'rmfacilities-onepage' ) . '</a></li>';
 	echo '</ul>';
+}
+
+function rmf_get_whatsapp_number() {
+	$whatsapp = get_theme_mod( 'rmf_whatsapp_phone', '+55 (12) 3042-1799' );
+	$digits   = preg_replace( '/\D+/', '', (string) $whatsapp );
+
+	if ( empty( $digits ) ) {
+		$fallback = get_theme_mod( 'rmf_company_phone_2', '+55 (12) 3042-1799' );
+		$digits   = preg_replace( '/\D+/', '', (string) $fallback );
+	}
+
+	return (string) $digits;
+}
+
+function rmf_get_whatsapp_url() {
+	$digits = rmf_get_whatsapp_number();
+	return ! empty( $digits ) ? 'https://wa.me/' . $digits : '#contato';
 }
 
 function rmf_customize_register( $wp_customize ) {
@@ -100,6 +119,7 @@ function rmf_customize_register( $wp_customize ) {
 		'rmf_company_address' => 'Avenida Ilidio Meinberg Porto, 199, Sala 6, Jardim Sao Vicente, Sao Jose dos Campos - SP - CEP 12224310',
 		'rmf_company_phone_1' => '+55 (12) 3042-1795',
 		'rmf_company_phone_2' => '+55 (12) 3042-1799',
+		'rmf_whatsapp_phone'  => '+55 (12) 3042-1799',
 		'rmf_company_cnpj'    => '39.416.796/0001-01',
 		'rmf_company_email'   => 'contato@rmfacilities.com.br',
 		'rmf_company_careers' => 'trabalheconosco@rmfacilities.com.br',
@@ -133,9 +153,10 @@ add_action( 'customize_register', 'rmf_customize_register' );
  *
  * @param string $title Titulo da pagina.
  * @param string $slug  Slug da pagina.
+ * @param string $content Conteudo da pagina.
  * @return int ID da pagina.
  */
-function rmf_get_or_create_page( $title, $slug ) {
+function rmf_get_or_create_page( $title, $slug, $content = '' ) {
 	$existing_page = get_page_by_path( $slug );
 
 	if ( $existing_page instanceof WP_Post ) {
@@ -165,7 +186,7 @@ function rmf_get_or_create_page( $title, $slug ) {
 			'post_name'    => $slug,
 			'post_status'  => 'publish',
 			'post_type'    => 'page',
-			'post_content' => '',
+			'post_content' => $content,
 		)
 	);
 
@@ -182,6 +203,35 @@ function rmf_get_or_create_page( $title, $slug ) {
 function rmf_after_switch_theme_setup() {
 	$home_page_id = rmf_get_or_create_page( 'Inicio', 'inicio' );
 	$blog_page_id = rmf_get_or_create_page( 'Blog', 'blog' );
+	$thanks_id    = rmf_get_or_create_page( 'Obrigado', 'obrigado', 'Obrigado pelo contato. Nossa equipe retornara em breve com uma proposta personalizada.' );
+	$privacy_id   = rmf_get_or_create_page( 'Politica de Privacidade', 'politica-de-privacidade', 'Esta pagina deve descrever como dados sao tratados pela RM Facilities LTDA, em conformidade com a LGPD.' );
+
+	$service_pages = array(
+		array(
+			'title'   => 'Portaria em Sao Jose dos Campos',
+			'slug'    => 'portaria-sao-jose-dos-campos',
+			'content' => 'Servico de portaria com controle de acesso, postura profissional e apoio operacional para empresas em Sao Jose dos Campos.',
+		),
+		array(
+			'title'   => 'Limpeza em Sao Jose dos Campos',
+			'slug'    => 'limpeza-sao-jose-dos-campos',
+			'content' => 'Rotinas de limpeza profissional para ambientes corporativos, com padrao de qualidade, seguranca e produtividade.',
+		),
+		array(
+			'title'   => 'Jardinagem em Sao Jose dos Campos',
+			'slug'    => 'jardinagem-sao-jose-dos-campos',
+			'content' => 'Manutencao de areas verdes e paisagismo funcional para valorizar empreendimentos empresariais.',
+		),
+		array(
+			'title'   => 'Recepcao em Sao Jose dos Campos',
+			'slug'    => 'recepcao-sao-jose-dos-campos',
+			'content' => 'Recepcao corporativa com atendimento cordial e processos padronizados para reforcar a imagem da sua empresa.',
+		),
+	);
+
+	foreach ( $service_pages as $service_page ) {
+		rmf_get_or_create_page( $service_page['title'], $service_page['slug'], $service_page['content'] );
+	}
 
 	if ( $home_page_id > 0 ) {
 		update_option( 'show_on_front', 'page' );
@@ -190,6 +240,14 @@ function rmf_after_switch_theme_setup() {
 
 	if ( $blog_page_id > 0 ) {
 		update_option( 'page_for_posts', $blog_page_id );
+	}
+
+	if ( $thanks_id > 0 ) {
+		update_option( 'rmf_thanks_page_id', $thanks_id );
+	}
+
+	if ( $privacy_id > 0 ) {
+		update_option( 'wp_page_for_privacy_policy', $privacy_id );
 	}
 
 	$menu_name = 'Menu Principal RM Facilities';
@@ -210,12 +268,20 @@ function rmf_after_switch_theme_setup() {
 					'url'   => home_url( '/#sobre' ),
 				),
 				array(
+					'title' => 'Diferenciais',
+					'url'   => home_url( '/#porque' ),
+				),
+				array(
 					'title' => 'Servicos',
 					'url'   => home_url( '/#servicos' ),
 				),
 				array(
 					'title' => 'Contato',
 					'url'   => home_url( '/#contato' ),
+				),
+				array(
+					'title' => 'FAQ',
+					'url'   => home_url( '/#faq' ),
 				),
 				array(
 					'title' => 'Artigos',
@@ -244,3 +310,121 @@ function rmf_after_switch_theme_setup() {
 	}
 }
 add_action( 'after_switch_theme', 'rmf_after_switch_theme_setup' );
+
+function rmf_handle_contact_form_submission() {
+	if ( ! isset( $_POST['rmf_contact_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['rmf_contact_nonce'] ) ), 'rmf_contact_submit' ) ) {
+		wp_safe_redirect( home_url( '/#contato' ) );
+		exit;
+	}
+
+	$fields = array(
+		'nome'     => isset( $_POST['rmf_nome'] ) ? sanitize_text_field( wp_unslash( $_POST['rmf_nome'] ) ) : '',
+		'empresa'  => isset( $_POST['rmf_empresa'] ) ? sanitize_text_field( wp_unslash( $_POST['rmf_empresa'] ) ) : '',
+		'email'    => isset( $_POST['rmf_email'] ) ? sanitize_email( wp_unslash( $_POST['rmf_email'] ) ) : '',
+		'telefone' => isset( $_POST['rmf_telefone'] ) ? sanitize_text_field( wp_unslash( $_POST['rmf_telefone'] ) ) : '',
+		'servico'  => isset( $_POST['rmf_servico'] ) ? sanitize_text_field( wp_unslash( $_POST['rmf_servico'] ) ) : '',
+		'metragem' => isset( $_POST['rmf_metragem'] ) ? sanitize_text_field( wp_unslash( $_POST['rmf_metragem'] ) ) : '',
+		'cidade'   => isset( $_POST['rmf_cidade'] ) ? sanitize_text_field( wp_unslash( $_POST['rmf_cidade'] ) ) : '',
+		'urgencia' => isset( $_POST['rmf_urgencia'] ) ? sanitize_text_field( wp_unslash( $_POST['rmf_urgencia'] ) ) : '',
+		'mensagem' => isset( $_POST['rmf_mensagem'] ) ? sanitize_textarea_field( wp_unslash( $_POST['rmf_mensagem'] ) ) : '',
+	);
+
+	if ( empty( $fields['nome'] ) || empty( $fields['email'] ) || empty( $fields['servico'] ) ) {
+		wp_safe_redirect( home_url( '/#contato' ) );
+		exit;
+	}
+
+	$to      = get_theme_mod( 'rmf_company_email', get_option( 'admin_email' ) );
+	$subject = 'Novo lead do site RM Facilities LTDA';
+	$message = "Nome: {$fields['nome']}\n";
+	$message .= "Empresa: {$fields['empresa']}\n";
+	$message .= "E-mail: {$fields['email']}\n";
+	$message .= "Telefone: {$fields['telefone']}\n";
+	$message .= "Servico: {$fields['servico']}\n";
+	$message .= "Metragem: {$fields['metragem']}\n";
+	$message .= "Cidade: {$fields['cidade']}\n";
+	$message .= "Urgencia: {$fields['urgencia']}\n";
+	$message .= "Mensagem: {$fields['mensagem']}\n";
+
+	$headers = array( 'Reply-To: ' . $fields['nome'] . ' <' . $fields['email'] . '>' );
+
+	wp_mail( $to, $subject, $message, $headers );
+
+	$thanks_page_id = (int) get_option( 'rmf_thanks_page_id' );
+	$thanks_url     = $thanks_page_id > 0 ? get_permalink( $thanks_page_id ) : home_url( '/obrigado/' );
+
+	wp_safe_redirect( $thanks_url );
+	exit;
+}
+add_action( 'admin_post_nopriv_rmf_submit_contact', 'rmf_handle_contact_form_submission' );
+add_action( 'admin_post_rmf_submit_contact', 'rmf_handle_contact_form_submission' );
+
+function rmf_output_structured_data() {
+	if ( ! is_front_page() ) {
+		return;
+	}
+
+	$faq = array(
+		array(
+			'question' => 'Como funciona a implantacao de um novo posto?',
+			'answer'   => 'Realizamos diagnostico inicial, definicao de escopo, alocacao da equipe e acompanhamento supervisionado nos primeiros dias.',
+		),
+		array(
+			'question' => 'A RM Facilities LTDA atende quais cidades?',
+			'answer'   => 'Atendemos Sao Jose dos Campos e regiao, com possibilidade de expansao conforme o perfil da operacao.',
+		),
+		array(
+			'question' => 'Quais servicos podem ser contratados?',
+			'answer'   => 'Portaria, limpeza, jardinagem e recepcao com planos personalizados para empresas e condominios.',
+		),
+	);
+
+	$faq_entities = array();
+	foreach ( $faq as $item ) {
+		$faq_entities[] = array(
+			'@type'          => 'Question',
+			'name'           => $item['question'],
+			'acceptedAnswer' => array(
+				'@type' => 'Answer',
+				'text'  => $item['answer'],
+			),
+		);
+	}
+
+	$business_schema = array(
+		'@context'   => 'https://schema.org',
+		'@type'      => 'LocalBusiness',
+		'name'       => 'RM FACILITIES LTDA',
+		'url'        => home_url( '/' ),
+		'telephone'  => get_theme_mod( 'rmf_company_phone_2', '+55 (12) 3042-1799' ),
+		'email'      => get_theme_mod( 'rmf_company_email', '' ),
+		'identifier' => get_theme_mod( 'rmf_company_cnpj', '' ),
+		'address'    => array(
+			'@type'           => 'PostalAddress',
+			'streetAddress'   => get_theme_mod( 'rmf_company_address', '' ),
+			'addressLocality' => 'Sao Jose dos Campos',
+			'addressRegion'   => 'SP',
+			'addressCountry'  => 'BR',
+		),
+		'areaServed' => array(
+			'Sao Jose dos Campos',
+			'Vale do Paraiba',
+		),
+		'sameAs'      => array_filter(
+			array(
+				get_theme_mod( 'rmf_instagram_url', '' ),
+				get_theme_mod( 'rmf_facebook_url', '' ),
+			)
+		),
+	);
+
+	$faq_schema = array(
+		'@context'   => 'https://schema.org',
+		'@type'      => 'FAQPage',
+		'mainEntity' => $faq_entities,
+	);
+
+	echo '<script type="application/ld+json">' . wp_json_encode( $business_schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . '</script>';
+	echo '<script type="application/ld+json">' . wp_json_encode( $faq_schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . '</script>';
+}
+add_action( 'wp_head', 'rmf_output_structured_data', 20 );
