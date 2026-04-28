@@ -13,7 +13,7 @@ $rmf_wpp_url = function_exists( 'rmf_get_whatsapp_url' ) ? rmf_get_whatsapp_url(
 <section class="hero section" id="inicio">
 	<div class="container">
 		<p class="kicker" data-hero-reveal="1"><?php esc_html_e( 'Terceirizacao de servicos profissionais', 'rmfacilities-onepage' ); ?></p>
-		<h1 data-hero-reveal="2"><?php esc_html_e( 'Portaria, limpeza, jardinagem e recepcao para a sua empresa', 'rmfacilities-onepage' ); ?></h1>
+		<h1 data-hero-reveal="2"><?php esc_html_e( 'Portaria, Limpeza, Jardinagem e Recepcao em Sao Jose dos Campos', 'rmfacilities-onepage' ); ?></h1>
 		<p data-hero-reveal="3"><?php esc_html_e( 'Todos os nossos servicos sao prestados por profissionais capacitados, com rigoroso processo de selecao e treinamento continuo.', 'rmfacilities-onepage' ); ?></p>
 		<div class="hero-actions" data-hero-reveal="4">
 			<a class="btn btn-primary" href="#contato"><?php esc_html_e( 'Solicitar orcamento', 'rmfacilities-onepage' ); ?></a>

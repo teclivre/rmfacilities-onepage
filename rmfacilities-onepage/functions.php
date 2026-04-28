@@ -428,3 +428,74 @@ function rmf_output_structured_data() {
 	echo '<script type="application/ld+json">' . wp_json_encode( $faq_schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . '</script>';
 }
 add_action( 'wp_head', 'rmf_output_structured_data', 20 );
+
+/**
+ * SEO: title tag, meta description, canonical, Open Graph e Twitter Card.
+ */
+function rmf_output_seo_meta() {
+	$site_name    = 'RM Facilities LTDA';
+	$city         = 'Sao Jose dos Campos';
+	$services     = 'Portaria, Limpeza, Jardinagem e Recepcao';
+	$canonical    = esc_url( home_url( '/' ) );
+	$og_image     = esc_url( get_theme_mod( 'rmf_og_image', 'https://rmfacilities.com.br/wp-content/uploads/2023/08/logo-rm-facilities-1.png' ) );
+
+	if ( is_front_page() || is_home() ) {
+		$title       = $site_name . ' | ' . $services . ' em ' . $city . ' - SP';
+		$description = 'A ' . $site_name . ' oferece servicos terceirizados de ' . strtolower( $services ) . ' em ' . $city . ' e regiao. Equipe treinada, supervisao presencial e conformidade trabalhista. Solicite seu orcamento!';
+	} elseif ( is_singular() ) {
+		$title       = get_the_title() . ' | ' . $site_name;
+		$description = has_excerpt() ? wp_strip_all_tags( get_the_excerpt() ) : wp_trim_words( wp_strip_all_tags( get_the_content() ), 30, '...' );
+		$canonical   = esc_url( get_permalink() );
+		if ( has_post_thumbnail() ) {
+			$og_image = esc_url( get_the_post_thumbnail_url( null, 'large' ) );
+		}
+	} elseif ( is_archive() || is_category() || is_tag() ) {
+		$title       = single_term_title( '', false ) . ' | Blog ' . $site_name;
+		$description = 'Artigos e novidades sobre facilities, limpeza, portaria e terceirizacao de servicos. Blog ' . $site_name . '.';
+		$canonical   = esc_url( get_term_link( get_queried_object() ) );
+	} else {
+		$title       = get_bloginfo( 'name' ) . ' | ' . get_bloginfo( 'description' );
+		$description = get_bloginfo( 'description' );
+	}
+
+	$title       = esc_attr( wp_strip_all_tags( $title ) );
+	$description = esc_attr( wp_strip_all_tags( wp_trim_words( $description, 30, '...' ) ) );
+
+	?>
+	<!-- SEO Meta -->
+	<meta name="description" content="<?php echo $description; ?>">
+	<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+	<link rel="canonical" href="<?php echo $canonical; ?>">
+
+	<!-- Open Graph -->
+	<meta property="og:type" content="website">
+	<meta property="og:site_name" content="<?php echo esc_attr( $site_name ); ?>">
+	<meta property="og:title" content="<?php echo $title; ?>">
+	<meta property="og:description" content="<?php echo $description; ?>">
+	<meta property="og:url" content="<?php echo $canonical; ?>">
+	<meta property="og:image" content="<?php echo $og_image; ?>">
+	<meta property="og:image:width" content="1200">
+	<meta property="og:image:height" content="630">
+	<meta property="og:locale" content="pt_BR">
+
+	<!-- Twitter Card -->
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:title" content="<?php echo $title; ?>">
+	<meta name="twitter:description" content="<?php echo $description; ?>">
+	<meta name="twitter:image" content="<?php echo $og_image; ?>">
+	<?php
+}
+add_action( 'wp_head', 'rmf_output_seo_meta', 5 );
+
+/**
+ * Filtrar o title tag gerado pelo WordPress.
+ */
+function rmf_filter_document_title( $title_parts ) {
+	if ( is_front_page() ) {
+		$title_parts['title']   = 'RM Facilities LTDA | Portaria, Limpeza, Jardinagem e Recepcao';
+		$title_parts['tagline'] = 'Sao Jose dos Campos - SP';
+		unset( $title_parts['site'] );
+	}
+	return $title_parts;
+}
+add_filter( 'document_title_parts', 'rmf_filter_document_title', 10, 1 );
