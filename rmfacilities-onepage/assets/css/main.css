@@ -151,9 +151,9 @@ h4 { animation-delay: 0.4s; }
 	position: sticky;
 	top: 0;
 	z-index: 900;
-	background: rgba(245, 240, 246, 0.95);
+	background: linear-gradient(120deg, rgba(247, 242, 248, 0.97) 0%, rgba(239, 230, 242, 0.95) 100%);
 	backdrop-filter: blur(12px);
-	border-bottom: 2px solid var(--rmf-accent);
+	border-bottom: 2px solid var(--rmf-brand);
 	box-shadow: var(--rmf-shadow-sm);
 	animation: slideInDown 0.6s ease-out;
 	transition: var(--transition);
@@ -243,8 +243,8 @@ h4 { animation-delay: 0.4s; }
 	position: relative;
 	display: inline-block;
 	overflow: hidden;
-	background: #ffffff;
-	border: 1px solid rgba(32, 93, 138, 0.18);
+	background: rgba(255, 255, 255, 0.72);
+	border: 1px solid rgba(32, 93, 138, 0.2);
 	box-shadow: 0 6px 16px rgba(32, 93, 138, 0.12);
 }
 
@@ -268,7 +268,7 @@ h4 { animation-delay: 0.4s; }
 	left: -100%;
 	width: 100%;
 	height: 100%;
-	background: linear-gradient(135deg, var(--rmf-brand) 0%, var(--rmf-accent) 100%);
+	background: linear-gradient(135deg, var(--rmf-brand-dark) 0%, var(--rmf-brand) 100%);
 	border-radius: 8px;
 	z-index: -1;
 	transition: var(--transition-fast);
@@ -281,11 +281,11 @@ h4 { animation-delay: 0.4s; }
 .menu a:hover,
 .menu .current-menu-item > a,
 .menu a.is-active {
-	color: #fff;
+	color: #ffffff;
 	border-color: transparent;
-	background: linear-gradient(135deg, var(--rmf-brand) 0%, var(--rmf-accent) 100%);
+	background: linear-gradient(135deg, var(--rmf-brand-dark) 0%, var(--rmf-brand) 100%);
 	transform: translateY(-2px);
-	box-shadow: 0 8px 16px rgba(242, 142, 52, 0.3);
+	box-shadow: 0 8px 18px rgba(32, 93, 138, 0.36);
 }
 
 .menu .current-menu-item > a::after,
@@ -823,8 +823,8 @@ h4 { animation-delay: 0.4s; }
 		left: 0;
 		right: 0;
 		padding: 12px 4vw 18px;
-		background: #f5f6f2;
-		border-bottom: 1px solid var(--rmf-border);
+		background: linear-gradient(180deg, rgba(247, 242, 248, 0.99) 0%, rgba(239, 230, 242, 0.98) 100%);
+		border-bottom: 1px solid rgba(32, 93, 138, 0.25);
 	}
 
 	.main-navigation.is-open {
@@ -871,7 +871,7 @@ h4 { animation-delay: 0.4s; }
 /* Scroll Animations */
 .site-header.scrolled {
 	box-shadow: var(--rmf-shadow);
-	background: rgba(245, 240, 246, 0.98);
+	background: linear-gradient(120deg, rgba(247, 242, 248, 0.99) 0%, rgba(239, 230, 242, 0.98) 100%);
 }
 
 /* Viewport Animations */

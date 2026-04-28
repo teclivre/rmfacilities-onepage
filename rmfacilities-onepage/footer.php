@@ -9,9 +9,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$rmf_whatsapp_raw = get_theme_mod( 'rmf_company_phone_1', '+55 (12) 3042-1795' );
-$rmf_whatsapp_num = preg_replace( '/\D+/', '', (string) $rmf_whatsapp_raw );
-$rmf_whatsapp_url = $rmf_whatsapp_num ? 'https://wa.me/' . $rmf_whatsapp_num : '#contato';
+$rmf_whatsapp_url = function_exists( 'rmf_get_whatsapp_url' ) ? rmf_get_whatsapp_url() : '#contato';
+$rmf_phone_1     = get_theme_mod( 'rmf_company_phone_1', '+55 (12) 3042-1795' );
+$rmf_phone_2     = get_theme_mod( 'rmf_company_phone_2', '+55 (12) 3042-1799' );
+$rmf_email       = get_theme_mod( 'rmf_company_email', 'contato@rmfacilities.com.br' );
+$rmf_careers     = get_theme_mod( 'rmf_company_careers', 'trabalheconosco@rmfacilities.com.br' );
+$rmf_address     = get_theme_mod( 'rmf_company_address', 'Avenida Ilidio Meinberg Porto, 199, Sala 6 Jardim Sao Vicente, Sao Jose dos Campos - SP - CEP 12224-310' );
+$rmf_cnpj        = get_theme_mod( 'rmf_company_cnpj', '39.416.796/0001-01' );
 ?>
 
 </main>
@@ -19,17 +23,18 @@ $rmf_whatsapp_url = $rmf_whatsapp_num ? 'https://wa.me/' . $rmf_whatsapp_num : '
 <footer class="site-footer" id="rodape">
 	<div class="container footer-grid">
 		<div>
-			<h3><?php bloginfo( 'name' ); ?></h3>
-			<p><?php echo esc_html( get_theme_mod( 'rmf_company_address' ) ); ?></p>
-			<p><?php echo esc_html( get_theme_mod( 'rmf_company_phone_1' ) ); ?></p>
-			<p><?php echo esc_html( get_theme_mod( 'rmf_company_phone_2' ) ); ?></p>
-			<p>CNPJ: <?php echo esc_html( get_theme_mod( 'rmf_company_cnpj' ) ); ?></p>
+			<h3><?php esc_html_e( 'RM Facilities LTDA', 'rmfacilities-onepage' ); ?></h3>
+			<p><?php esc_html_e( 'CNPJ', 'rmfacilities-onepage' ); ?>: <?php echo esc_html( $rmf_cnpj ); ?></p>
+			<p><?php echo esc_html( $rmf_address ); ?></p>
 		</div>
 
 		<div>
 			<h3><?php esc_html_e( 'Contato', 'rmfacilities-onepage' ); ?></h3>
-			<p><a href="mailto:<?php echo esc_attr( get_theme_mod( 'rmf_company_email' ) ); ?>"><?php echo esc_html( get_theme_mod( 'rmf_company_email' ) ); ?></a></p>
-			<p><a href="mailto:<?php echo esc_attr( get_theme_mod( 'rmf_company_careers' ) ); ?>"><?php echo esc_html( get_theme_mod( 'rmf_company_careers' ) ); ?></a></p>
+			<p><strong><?php esc_html_e( 'Telefone 1', 'rmfacilities-onepage' ); ?>:</strong> <a href="tel:+551230421795"><?php echo esc_html( $rmf_phone_1 ); ?></a></p>
+			<p><strong><?php esc_html_e( 'Telefone 2', 'rmfacilities-onepage' ); ?>:</strong> <a href="tel:+551230421799"><?php echo esc_html( $rmf_phone_2 ); ?></a></p>
+			<p><strong>WhatsApp:</strong> <a href="<?php echo esc_url( $rmf_whatsapp_url ); ?>" target="_blank" rel="noopener noreferrer"><?php echo esc_html( get_theme_mod( 'rmf_whatsapp_phone', '+55 (12) 3042-1799' ) ); ?></a></p>
+			<p><strong>E-mail:</strong> <a href="mailto:<?php echo esc_attr( $rmf_email ); ?>"><?php echo esc_html( $rmf_email ); ?></a></p>
+			<p><strong><?php esc_html_e( 'Trabalhe conosco', 'rmfacilities-onepage' ); ?>:</strong> <a href="mailto:<?php echo esc_attr( $rmf_careers ); ?>"><?php echo esc_html( $rmf_careers ); ?></a></p>
 		</div>
 
 		<div>
