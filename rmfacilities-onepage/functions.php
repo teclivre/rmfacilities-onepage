@@ -127,10 +127,21 @@ function rmf_get_or_create_page( $title, $slug ) {
 		return (int) $existing_page->ID;
 	}
 
-	$existing_page = get_page_by_title( $title );
+	// Substituicao de get_page_by_title() removida no WP 6.7
+	$pages = get_posts(
+		array(
+			'post_type'              => 'page',
+			'title'                  => $title,
+			'posts_per_page'         => 1,
+			'no_found_rows'          => true,
+			'ignore_sticky_posts'    => true,
+			'update_post_term_cache' => false,
+			'update_post_meta_cache' => false,
+		)
+	);
 
-	if ( $existing_page instanceof WP_Post ) {
-		return (int) $existing_page->ID;
+	if ( ! empty( $pages ) && $pages[0] instanceof WP_Post ) {
+		return (int) $pages[0]->ID;
 	}
 
 	$page_id = wp_insert_post(
