@@ -97,12 +97,21 @@
 		});
 	}, observerOptions);
 
-	const animatableElements = document.querySelectorAll('.card, .post-card, .section h2, .section h3, .btn, .highlight-box, .trust-item, .logo-wall span');
+	const animatableElements = document.querySelectorAll('.card, .post-card, .section h2, .section h3, .btn, .highlight-box, .trust-item, .logo-wall span, .testimonial-card');
 	animatableElements.forEach(function (element) {
 		if (!element.classList.contains('in-viewport')) {
 			observer.observe(element);
 		}
 	});
+
+	const heroSection = document.querySelector('.hero');
+	if (heroSection) {
+		window.requestAnimationFrame(function () {
+			window.setTimeout(function () {
+				heroSection.classList.add('is-ready');
+			}, 60);
+		});
+	}
 
 	window.addEventListener('scroll', function () {
 		if (header && window.scrollY > 10) {
@@ -114,7 +123,6 @@
 		setActiveMenuLink();
 	});
 
-	const heroSection = document.querySelector('.hero');
 	if (heroSection) {
 		window.addEventListener('scroll', function () {
 			const scrolled = window.scrollY;

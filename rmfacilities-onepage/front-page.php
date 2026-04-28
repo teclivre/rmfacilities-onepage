@@ -14,10 +14,10 @@ $rmf_whatsapp_url = $rmf_whatsapp_num ? 'https://wa.me/' . $rmf_whatsapp_num : '
 
 <section class="hero section" id="inicio">
 	<div class="container">
-		<p class="kicker"><?php esc_html_e( 'Terceirizacao de servicos profissionais', 'rmfacilities-onepage' ); ?></p>
-		<h1><?php esc_html_e( 'Portaria, limpeza, jardinagem e recepcao para a sua empresa', 'rmfacilities-onepage' ); ?></h1>
-		<p><?php esc_html_e( 'Todos os nossos servicos sao prestados por profissionais capacitados, com rigoroso processo de selecao e treinamento continuo.', 'rmfacilities-onepage' ); ?></p>
-		<div class="hero-actions">
+		<p class="kicker" data-hero-reveal="1"><?php esc_html_e( 'Terceirizacao de servicos profissionais', 'rmfacilities-onepage' ); ?></p>
+		<h1 data-hero-reveal="2"><?php esc_html_e( 'Portaria, limpeza, jardinagem e recepcao para a sua empresa', 'rmfacilities-onepage' ); ?></h1>
+		<p data-hero-reveal="3"><?php esc_html_e( 'Todos os nossos servicos sao prestados por profissionais capacitados, com rigoroso processo de selecao e treinamento continuo.', 'rmfacilities-onepage' ); ?></p>
+		<div class="hero-actions" data-hero-reveal="4">
 			<a class="btn btn-primary" href="#contato"><?php esc_html_e( 'Solicitar orcamento', 'rmfacilities-onepage' ); ?></a>
 			<a class="btn btn-outline" href="<?php echo esc_url( $rmf_whatsapp_url ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Falar no WhatsApp', 'rmfacilities-onepage' ); ?></a>
 		</div>
@@ -118,6 +118,48 @@ $rmf_whatsapp_url = $rmf_whatsapp_num ? 'https://wa.me/' . $rmf_whatsapp_num : '
 			<p><?php esc_html_e( 'Envie seu curriculo para:', 'rmfacilities-onepage' ); ?></p>
 			<p><a href="mailto:<?php echo esc_attr( get_theme_mod( 'rmf_company_careers' ) ); ?>"><?php echo esc_html( get_theme_mod( 'rmf_company_careers' ) ); ?></a></p>
 			<p><?php echo esc_html( get_theme_mod( 'rmf_company_address' ) ); ?></p>
+		</div>
+	</div>
+</section>
+
+<section class="section section-alt" id="depoimentos">
+	<div class="container">
+		<p class="kicker"><?php esc_html_e( 'Depoimentos', 'rmfacilities-onepage' ); ?></p>
+		<h2><?php esc_html_e( 'O que nossos clientes dizem', 'rmfacilities-onepage' ); ?></h2>
+
+		<div class="testimonial-grid">
+			<article class="testimonial-card">
+				<div class="testimonial-head">
+					<span class="testimonial-avatar" aria-hidden="true">AC</span>
+					<div>
+						<h3><?php esc_html_e( 'Ana Carvalho', 'rmfacilities-onepage' ); ?></h3>
+						<p class="testimonial-role"><?php esc_html_e( 'SindicA profissional, condominio empresarial', 'rmfacilities-onepage' ); ?></p>
+					</div>
+				</div>
+				<p><?php esc_html_e( 'A equipe da RM Facilities LTDA elevou o padrao de atendimento da nossa portaria e trouxe mais seguranca para moradores e visitantes.', 'rmfacilities-onepage' ); ?></p>
+			</article>
+
+			<article class="testimonial-card">
+				<div class="testimonial-head">
+					<span class="testimonial-avatar" aria-hidden="true">RF</span>
+					<div>
+						<h3><?php esc_html_e( 'Rafael Freitas', 'rmfacilities-onepage' ); ?></h3>
+						<p class="testimonial-role"><?php esc_html_e( 'Gerente administrativo, centro logistico', 'rmfacilities-onepage' ); ?></p>
+					</div>
+				</div>
+				<p><?php esc_html_e( 'Conseguimos padronizar limpeza e recepcao com indicadores claros. O acompanhamento operacional e muito proximo.', 'rmfacilities-onepage' ); ?></p>
+			</article>
+
+			<article class="testimonial-card">
+				<div class="testimonial-head">
+					<span class="testimonial-avatar" aria-hidden="true">ML</span>
+					<div>
+						<h3><?php esc_html_e( 'Mariana Lopes', 'rmfacilities-onepage' ); ?></h3>
+						<p class="testimonial-role"><?php esc_html_e( 'Diretora operacional, instituicao de ensino', 'rmfacilities-onepage' ); ?></p>
+					</div>
+				</div>
+				<p><?php esc_html_e( 'A terceirizacao com a RM Facilities LTDA trouxe mais previsibilidade e qualidade no dia a dia da operacao.', 'rmfacilities-onepage' ); ?></p>
+			</article>
 		</div>
 	</div>
 </section>
