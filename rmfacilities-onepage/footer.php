@@ -44,7 +44,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 
 	<div class="container footer-bottom">
-		<p>&copy; <?php echo esc_html( gmdate( 'Y' ) ); ?> <?php bloginfo( 'name' ); ?>. <?php esc_html_e( 'Todos os direitos reservados.', 'rmfacilities-onepage' ); ?></p>
+			<p>&copy; <?php echo esc_html( gmdate( 'Y' ) ); ?> RM Facilities LTDA. Todos os direitos reservados.</p>
 	</div>
 </footer>
 

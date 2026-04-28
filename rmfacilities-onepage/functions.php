@@ -76,7 +76,7 @@ function rmf_customize_register( $wp_customize ) {
 		'rmf_company_data',
 		array(
 			'title'       => __( 'Dados da Empresa', 'rmfacilities-onepage' ),
-			'description' => __( 'Ajuste rapido dos dados institucionais exibidos no tema.', 'rmfacilities-onepage' ),
+			'description' => __( 'RM Facilities LTDA - Ajuste rápido dos dados institucionais exibidos no tema.', 'rmfacilities-onepage' ),
 			'priority'    => 30,
 		)
 	);

@@ -1,3 +1,27 @@
+RM Facilities OnePage - Tema WordPress Moderno para RM Facilities LTDA
+
+SOBRE A EMPRESA
+Empresa: RM Facilities LTDA
+Website: https://rmfacilities.com.br
+Serviços: Portaria, Limpeza, Jardinagem, Recepção
+
+RECURSOS DO TEMA
+- Design moderno e responsivo
+- Animações sofisticadas ao scroll
+- Página única (One-Page) com menu flutuante
+- Seção de blog integrada
+- Otimizado para WordPress 6.9+
+- PHP 7.4+
+
+INSTALACAO
+CONFIGURACAO AUTOMATICA
+Ao ativar o tema, executa-se automaticamente:
+- Criação das páginas "Inicio" e "Blog"
+- Configuração de "Inicio" como página inicial
+- Configuração de "Blog" como página de posts
+- Criação do menu principal com links one-page (#inicio, #sobre, #servicos, #contato, #blog)
+
+SECOES DA HOME
 RM Facilities OnePage - Tema WordPress
 
 INSTALACAO
