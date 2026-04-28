@@ -29,8 +29,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 				the_custom_logo();
 			} else {
 				?>
-				<a class="site-title" href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php bloginfo( 'name' ); ?></a>
+				<a class="site-logo-link" href="<?php echo esc_url( home_url( '/' ) ); ?>">
+					<img
+						src="https://rmfacilities.com.br/wp-content/uploads/2023/08/logo-rm-facilities-1.png"
+						alt="<?php bloginfo( 'name' ); ?>"
+						class="site-logo-img"
+						width="180"
+						height="60"
+					/>
+				</a>
 				<?php
+			}
 			}
 			?>
 		</div>

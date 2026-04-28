@@ -10,9 +10,9 @@ get_header();
 
 <section class="hero section" id="inicio">
 	<div class="container">
-		<p class="kicker"><?php esc_html_e( 'Facilities e terceirizacao de servicos', 'rmfacilities-onepage' ); ?></p>
-		<h1><?php esc_html_e( 'Solucoes completas para operacao e manutencao da sua empresa', 'rmfacilities-onepage' ); ?></h1>
-		<p><?php esc_html_e( 'Todos os nossos servicos sao prestados por profissionais capacitados, com rigoroso processo de selecao e treinamento.', 'rmfacilities-onepage' ); ?></p>
+		<p class="kicker"><?php esc_html_e( 'Terceirizacao de servicos profissionais', 'rmfacilities-onepage' ); ?></p>
+		<h1><?php esc_html_e( 'Portaria, limpeza, jardinagem e recepcao para a sua empresa', 'rmfacilities-onepage' ); ?></h1>
+		<p><?php esc_html_e( 'Todos os nossos servicos sao prestados por profissionais capacitados, com rigoroso processo de selecao e treinamento continuo.', 'rmfacilities-onepage' ); ?></p>
 		<div class="hero-actions">
 			<a class="btn btn-primary" href="#contato"><?php esc_html_e( 'Solicitar orcamento', 'rmfacilities-onepage' ); ?></a>
 			<a class="btn btn-outline" href="#servicos"><?php esc_html_e( 'Conhecer servicos', 'rmfacilities-onepage' ); ?></a>
@@ -41,19 +41,27 @@ get_header();
 <section class="section section-alt" id="servicos">
 	<div class="container">
 		<p class="kicker"><?php esc_html_e( 'Nossos servicos', 'rmfacilities-onepage' ); ?></p>
-		<h2><?php esc_html_e( 'Solucoes sob medida para seu negocio', 'rmfacilities-onepage' ); ?></h2>
-		<div class="cards">
+		<h2><?php esc_html_e( 'Solucoes sob medida para o seu negocio', 'rmfacilities-onepage' ); ?></h2>
+		<div class="cards cards-4">
 			<article class="card">
-				<h3><?php esc_html_e( 'Servicos de limpeza', 'rmfacilities-onepage' ); ?></h3>
+				<span class="card-icon">🏢</span>
+				<h3><?php esc_html_e( 'Portaria', 'rmfacilities-onepage' ); ?></h3>
+				<p><?php esc_html_e( 'Controle de acesso e seguranca patrimonial com profissionais treinados e postura adequada para representar sua empresa.', 'rmfacilities-onepage' ); ?></p>
+			</article>
+			<article class="card">
+				<span class="card-icon">🧹</span>
+				<h3><?php esc_html_e( 'Limpeza', 'rmfacilities-onepage' ); ?></h3>
 				<p><?php esc_html_e( 'Rotinas de limpeza profissional com controle de qualidade e equipes preparadas para diferentes tipos de ambiente.', 'rmfacilities-onepage' ); ?></p>
 			</article>
 			<article class="card">
-				<h3><?php esc_html_e( 'Gestao de escritorios e instalacoes', 'rmfacilities-onepage' ); ?></h3>
-				<p><?php esc_html_e( 'Gestao operacional de espacos corporativos para melhorar fluxo, organizacao e eficiencia no dia a dia.', 'rmfacilities-onepage' ); ?></p>
+				<span class="card-icon">🌿</span>
+				<h3><?php esc_html_e( 'Jardinagem', 'rmfacilities-onepage' ); ?></h3>
+				<p><?php esc_html_e( 'Manutencao e cuidado de areas verdes internas e externas, valorizando o ambiente da sua empresa.', 'rmfacilities-onepage' ); ?></p>
 			</article>
 			<article class="card">
-				<h3><?php esc_html_e( 'Apoio operacional', 'rmfacilities-onepage' ); ?></h3>
-				<p><?php esc_html_e( 'Terceirizacao de atividades de suporte para que sua equipe foque no que realmente importa: o core do negocio.', 'rmfacilities-onepage' ); ?></p>
+				<span class="card-icon">🤝</span>
+				<h3><?php esc_html_e( 'Recepcao', 'rmfacilities-onepage' ); ?></h3>
+				<p><?php esc_html_e( 'Atendimento receptivo e profissional para clientes e visitantes, transmitindo a imagem da sua empresa desde a entrada.', 'rmfacilities-onepage' ); ?></p>
 			</article>
 		</div>
 	</div>
