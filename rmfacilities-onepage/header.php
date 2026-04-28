@@ -40,7 +40,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</a>
 				<?php
 			}
-			}
 			?>
 		</div>
 
