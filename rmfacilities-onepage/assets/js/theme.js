@@ -52,4 +52,50 @@
 			}
 		});
 	});
+
+	// Intersection Observer para animar elementos ao scroll
+	const observerOptions = {
+		threshold: 0.1,
+		rootMargin: '0px 0px -50px 0px'
+	};
+
+	const observer = new IntersectionObserver(function (entries) {
+		entries.forEach(function (entry) {
+			if (entry.isIntersecting) {
+				entry.target.classList.add('in-viewport');
+				observer.unobserve(entry.target);
+			}
+		});
+	}, observerOptions);
+
+	// Aplicar observer a elementos animáveis
+	const animatableElements = document.querySelectorAll('.card, .post-card, .section h2, .section h3, .btn, .highlight-box');
+	animatableElements.forEach(function (element) {
+		if (!element.classList.contains('in-viewport')) {
+			observer.observe(element);
+		}
+	});
+
+	// Adicionar classe de animação ao scroll
+	window.addEventListener('scroll', function () {
+		if (header && window.scrollY > 10) {
+			header.classList.add('scrolled');
+		} else if (header) {
+			header.classList.remove('scrolled');
+		}
+	});
+
+	// Efeito de paralax suave
+	const heroSection = document.querySelector('.hero');
+	if (heroSection) {
+		window.addEventListener('scroll', function () {
+			const scrolled = window.scrollY;
+			heroSection.style.backgroundPosition = '0 ' + (scrolled * 0.5) + 'px';
+		});
+	}
+})();
+				toggle.setAttribute('aria-expanded', 'false');
+			}
+		});
+	});
 })();
