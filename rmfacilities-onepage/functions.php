@@ -371,7 +371,7 @@ function rmf_output_structured_data() {
 		),
 		array(
 			'question' => 'A RM Facilities LTDA atende quais cidades?',
-			'answer'   => 'Atendemos Sao Jose dos Campos e regiao, com possibilidade de expansao conforme o perfil da operacao.',
+			'answer'   => 'Atendemos Sao Jose dos Campos, Vale do Paraiba, Regiao Bragantina e Sul de Minas, com possibilidade de expansao conforme o perfil da operacao.',
 		),
 		array(
 			'question' => 'Quais servicos podem ser contratados?',
@@ -409,6 +409,8 @@ function rmf_output_structured_data() {
 		'areaServed' => array(
 			'Sao Jose dos Campos',
 			'Vale do Paraiba',
+			'Regiao Bragantina',
+			'Sul de Minas',
 		),
 		'sameAs'      => array_filter(
 			array(

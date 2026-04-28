@@ -27,7 +27,7 @@ $rmf_wpp_url = function_exists( 'rmf_get_whatsapp_url' ) ? rmf_get_whatsapp_url(
 		<div>
 			<p class="kicker"><?php esc_html_e( 'Quem somos', 'rmfacilities-onepage' ); ?></p>
 			<h2><?php esc_html_e( 'RM Facilities LTDA', 'rmfacilities-onepage' ); ?></h2>
-			<p><?php esc_html_e( 'Ha mais de 10 anos ajudamos empresas, condominios e instituicoes a manter ambientes funcionais e organizados, reduzindo custos operacionais e eliminando passivos trabalhistas.', 'rmfacilities-onepage' ); ?></p>
+			<p><?php esc_html_e( 'Com mais de 6 anos de experiencia em terceirizacao de servicos de portaria, limpeza, jardinagem e recepcao em Sao Jose dos Campos, Regiao Bragantina e Sul de Minas, a RM Facilities LTDA ajuda empresas, condominios e instituicoes a reduzir custos operacionais, elevar a produtividade e garantir conformidade trabalhista com seguranca.', 'rmfacilities-onepage' ); ?></p>
 		</div>
 		<div class="highlight-box">
 			<h3><?php esc_html_e( 'Por que terceirizar com a RM Facilities LTDA', 'rmfacilities-onepage' ); ?></h3>
@@ -106,8 +106,8 @@ $rmf_wpp_url = function_exists( 'rmf_get_whatsapp_url' ) ? rmf_get_whatsapp_url(
 			</article>
 			<article class="why-item">
 				<span class="why-icon" aria-hidden="true">📍</span>
-				<h3><?php esc_html_e( 'Atuacao em Sao Jose dos Campos e regiao', 'rmfacilities-onepage' ); ?></h3>
-				<p><?php esc_html_e( 'Com sede em SJC, atendemos com agilidade empresas, condominios e instituicoes no Vale do Paraiba.', 'rmfacilities-onepage' ); ?></p>
+				<h3><?php esc_html_e( 'Atuacao regional com base em SJC', 'rmfacilities-onepage' ); ?></h3>
+				<p><?php esc_html_e( 'Com sede em Sao Jose dos Campos, atendemos com agilidade empresas, condominios e instituicoes no Vale do Paraiba, Regiao Bragantina e Sul de Minas.', 'rmfacilities-onepage' ); ?></p>
 			</article>
 		</div>
 	</div>
@@ -298,7 +298,7 @@ $rmf_wpp_url = function_exists( 'rmf_get_whatsapp_url' ) ? rmf_get_whatsapp_url(
 			</div>
 			<div class="faq-item">
 				<dt class="faq-question"><?php esc_html_e( 'Em quais cidades voces atendem?', 'rmfacilities-onepage' ); ?></dt>
-				<dd class="faq-answer"><?php esc_html_e( 'Temos sede em Sao Jose dos Campos – SP e atendemos empresas e condominios no Vale do Paraiba e regiao metropolitana. Consulte-nos para verificar disponibilidade na sua cidade.', 'rmfacilities-onepage' ); ?></dd>
+				<dd class="faq-answer"><?php esc_html_e( 'Temos sede em Sao Jose dos Campos – SP e atendemos empresas e condominios no Vale do Paraiba, Regiao Bragantina e Sul de Minas. Consulte-nos para verificar disponibilidade na sua cidade.', 'rmfacilities-onepage' ); ?></dd>
 			</div>
 			<div class="faq-item">
 				<dt class="faq-question"><?php esc_html_e( 'Como funciona o processo de contratacao?', 'rmfacilities-onepage' ); ?></dt>
