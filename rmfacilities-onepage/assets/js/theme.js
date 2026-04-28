@@ -53,7 +53,36 @@
 		});
 	});
 
-	// Intersection Observer para animar elementos ao scroll
+	const sectionIds = ['inicio', 'sobre', 'resultados', 'servicos', 'contato', 'blog'];
+	const sections = sectionIds
+		.map(function (id) {
+			return document.getElementById(id);
+		})
+		.filter(Boolean);
+
+	function setActiveMenuLink() {
+		if (!sections.length) {
+			return;
+		}
+
+		const scrollOffset = (header ? header.offsetHeight : 0) + 80;
+		let currentId = sections[0].id;
+
+		sections.forEach(function (section) {
+			if (window.scrollY >= section.offsetTop - scrollOffset) {
+				currentId = section.id;
+			}
+		});
+
+		const topMenuLinks = document.querySelectorAll('.main-navigation .menu a[href*="#"]');
+		topMenuLinks.forEach(function (menuLink) {
+			const href = menuLink.getAttribute('href') || '';
+			const hashIndex = href.indexOf('#');
+			const id = hashIndex > -1 ? href.slice(hashIndex + 1) : '';
+			menuLink.classList.toggle('is-active', id === currentId);
+		});
+	}
+
 	const observerOptions = {
 		threshold: 0.1,
 		rootMargin: '0px 0px -50px 0px'
@@ -68,34 +97,30 @@
 		});
 	}, observerOptions);
 
-	// Aplicar observer a elementos animáveis
-	const animatableElements = document.querySelectorAll('.card, .post-card, .section h2, .section h3, .btn, .highlight-box');
+	const animatableElements = document.querySelectorAll('.card, .post-card, .section h2, .section h3, .btn, .highlight-box, .trust-item, .logo-wall span');
 	animatableElements.forEach(function (element) {
 		if (!element.classList.contains('in-viewport')) {
 			observer.observe(element);
 		}
 	});
 
-	// Adicionar classe de animação ao scroll
 	window.addEventListener('scroll', function () {
 		if (header && window.scrollY > 10) {
 			header.classList.add('scrolled');
 		} else if (header) {
 			header.classList.remove('scrolled');
 		}
+
+		setActiveMenuLink();
 	});
 
-	// Efeito de paralax suave
 	const heroSection = document.querySelector('.hero');
 	if (heroSection) {
 		window.addEventListener('scroll', function () {
 			const scrolled = window.scrollY;
-			heroSection.style.backgroundPosition = '0 ' + (scrolled * 0.5) + 'px';
+			heroSection.style.backgroundPosition = '0 ' + (scrolled * 0.25) + 'px';
 		});
 	}
-})();
-				toggle.setAttribute('aria-expanded', 'false');
-			}
-		});
-	});
+
+	setActiveMenuLink();
 })();

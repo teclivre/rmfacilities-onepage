@@ -6,6 +6,10 @@
  */
 
 get_header();
+
+$rmf_whatsapp_raw = get_theme_mod( 'rmf_company_phone_1', '+55 (12) 3042-1795' );
+$rmf_whatsapp_num = preg_replace( '/\D+/', '', (string) $rmf_whatsapp_raw );
+$rmf_whatsapp_url = $rmf_whatsapp_num ? 'https://wa.me/' . $rmf_whatsapp_num : '#contato';
 ?>
 
 <section class="hero section" id="inicio">
@@ -15,7 +19,7 @@ get_header();
 		<p><?php esc_html_e( 'Todos os nossos servicos sao prestados por profissionais capacitados, com rigoroso processo de selecao e treinamento continuo.', 'rmfacilities-onepage' ); ?></p>
 		<div class="hero-actions">
 			<a class="btn btn-primary" href="#contato"><?php esc_html_e( 'Solicitar orcamento', 'rmfacilities-onepage' ); ?></a>
-			<a class="btn btn-outline" href="#servicos"><?php esc_html_e( 'Conhecer servicos', 'rmfacilities-onepage' ); ?></a>
+			<a class="btn btn-outline" href="<?php echo esc_url( $rmf_whatsapp_url ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Falar no WhatsApp', 'rmfacilities-onepage' ); ?></a>
 		</div>
 	</div>
 </section>
@@ -34,6 +38,38 @@ get_header();
 				<li><?php esc_html_e( 'Padrao operacional consistente', 'rmfacilities-onepage' ); ?></li>
 				<li><?php esc_html_e( 'Atendimento personalizado', 'rmfacilities-onepage' ); ?></li>
 			</ul>
+		</div>
+	</div>
+</section>
+
+<section class="section trust-strip" id="resultados">
+	<div class="container">
+		<p class="kicker"><?php esc_html_e( 'Resultados e confianca', 'rmfacilities-onepage' ); ?></p>
+		<div class="trust-grid">
+			<article class="trust-item">
+				<strong>+120</strong>
+				<span><?php esc_html_e( 'postos de trabalho ativos', 'rmfacilities-onepage' ); ?></span>
+			</article>
+			<article class="trust-item">
+				<strong>98%</strong>
+				<span><?php esc_html_e( 'indice medio de satisfacao', 'rmfacilities-onepage' ); ?></span>
+			</article>
+			<article class="trust-item">
+				<strong>24/7</strong>
+				<span><?php esc_html_e( 'suporte operacional e supervisao', 'rmfacilities-onepage' ); ?></span>
+			</article>
+			<article class="trust-item">
+				<strong>+10</strong>
+				<span><?php esc_html_e( 'anos de atuacao em facilities', 'rmfacilities-onepage' ); ?></span>
+			</article>
+		</div>
+
+		<div class="logo-wall" aria-label="<?php esc_attr_e( 'Empresas atendidas', 'rmfacilities-onepage' ); ?>">
+			<span><?php esc_html_e( 'Condominios', 'rmfacilities-onepage' ); ?></span>
+			<span><?php esc_html_e( 'Centros Empresariais', 'rmfacilities-onepage' ); ?></span>
+			<span><?php esc_html_e( 'Instituicoes de Ensino', 'rmfacilities-onepage' ); ?></span>
+			<span><?php esc_html_e( 'Clinicas e Hospitais', 'rmfacilities-onepage' ); ?></span>
+			<span><?php esc_html_e( 'Industria', 'rmfacilities-onepage' ); ?></span>
 		</div>
 	</div>
 </section>

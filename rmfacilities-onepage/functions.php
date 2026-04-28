@@ -39,12 +39,27 @@ add_action( 'after_setup_theme', 'rmf_theme_setup' );
 
 function rmf_enqueue_assets() {
 	$version = wp_get_theme()->get( 'Version' );
+	$font_url = 'https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap';
 
+	wp_enqueue_style( 'rmf-fonts', $font_url, array(), null );
 	wp_enqueue_style( 'rmf-style', get_stylesheet_uri(), array(), $version );
-	wp_enqueue_style( 'rmf-main', get_template_directory_uri() . '/assets/css/main.css', array( 'rmf-style' ), $version );
+	wp_enqueue_style( 'rmf-main', get_template_directory_uri() . '/assets/css/main.css', array( 'rmf-fonts', 'rmf-style' ), $version );
 	wp_enqueue_script( 'rmf-theme', get_template_directory_uri() . '/assets/js/theme.js', array(), $version, true );
 }
 add_action( 'wp_enqueue_scripts', 'rmf_enqueue_assets' );
+
+function rmf_resource_hints( $urls, $relation_type ) {
+	if ( 'preconnect' === $relation_type ) {
+		$urls[] = 'https://fonts.googleapis.com';
+		$urls[] = array(
+			'href'        => 'https://fonts.gstatic.com',
+			'crossorigin' => 'anonymous',
+		);
+	}
+
+	return $urls;
+}
+add_filter( 'wp_resource_hints', 'rmf_resource_hints', 10, 2 );
 
 function rmf_register_sidebar() {
 	register_sidebar(

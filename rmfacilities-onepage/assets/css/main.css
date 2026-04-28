@@ -86,12 +86,14 @@ html {
 
 body {
 	margin: 0;
-	font-family: "Poppins", "Segoe UI", sans-serif;
+	font-family: "Manrope", "Segoe UI", sans-serif;
 	line-height: 1.6;
 	color: var(--rmf-ink);
 	background: linear-gradient(135deg, #f5f0f6 0%, #ede8f0 50%, #e8e0ec 100%);
 	background-attachment: fixed;
 	animation: fadeIn 0.8s ease-out;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
 }
 
 a {
@@ -109,7 +111,7 @@ h1,
 h2,
 h3,
 h4 {
-	font-family: "Montserrat", "Segoe UI", sans-serif;
+	font-family: "Sora", "Segoe UI", sans-serif;
 	line-height: 1.2;
 	margin-top: 0;
 	animation: fadeInUp 0.8s ease-out backwards;
@@ -233,7 +235,7 @@ h4 { animation-delay: 0.4s; }
 .menu li:nth-child(5) { animation-delay: 0.5s; }
 
 .menu a {
-	color: var(--rmf-ink);
+	color: var(--rmf-brand-dark);
 	font-weight: 600;
 	padding: 10px 16px;
 	border-radius: 8px;
@@ -241,6 +243,22 @@ h4 { animation-delay: 0.4s; }
 	position: relative;
 	display: inline-block;
 	overflow: hidden;
+	background: #ffffff;
+	border: 1px solid rgba(32, 93, 138, 0.18);
+	box-shadow: 0 6px 16px rgba(32, 93, 138, 0.12);
+}
+
+.menu a::after {
+	content: '';
+	position: absolute;
+	left: 12px;
+	right: 12px;
+	bottom: 6px;
+	height: 2px;
+	background: rgba(255, 255, 255, 0.95);
+	transform: scaleX(0);
+	transform-origin: center;
+	transition: transform 0.25s ease-out;
 }
 
 .menu a::before {
@@ -250,7 +268,7 @@ h4 { animation-delay: 0.4s; }
 	left: -100%;
 	width: 100%;
 	height: 100%;
-	background: var(--rmf-accent);
+	background: linear-gradient(135deg, var(--rmf-brand) 0%, var(--rmf-accent) 100%);
 	border-radius: 8px;
 	z-index: -1;
 	transition: var(--transition-fast);
@@ -261,10 +279,18 @@ h4 { animation-delay: 0.4s; }
 }
 
 .menu a:hover,
-.menu .current-menu-item > a {
+.menu .current-menu-item > a,
+.menu a.is-active {
 	color: #fff;
+	border-color: transparent;
+	background: linear-gradient(135deg, var(--rmf-brand) 0%, var(--rmf-accent) 100%);
 	transform: translateY(-2px);
 	box-shadow: 0 8px 16px rgba(242, 142, 52, 0.3);
+}
+
+.menu .current-menu-item > a::after,
+.menu a.is-active::after {
+	transform: scaleX(1);
 }
 
 .menu-toggle {
@@ -333,7 +359,6 @@ h4 { animation-delay: 0.4s; }
 	font-size: 1.1rem;
 	line-height: 1.8;
 }
-}
 
 .hero h1 {
 	font-size: clamp(2rem, 5vw, 3.3rem);
@@ -351,6 +376,66 @@ h4 { animation-delay: 0.4s; }
 	gap: 12px;
 	margin-top: 24px;
 	flex-wrap: wrap;
+}
+
+.trust-strip {
+	padding-top: 64px;
+	padding-bottom: 64px;
+	background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(245, 240, 246, 0.96) 100%);
+	border-top: 1px solid rgba(32, 93, 138, 0.1);
+	border-bottom: 1px solid rgba(32, 93, 138, 0.1);
+}
+
+.trust-grid {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 16px;
+	margin-top: 16px;
+}
+
+.trust-item {
+	background: #fff;
+	border: 1px solid rgba(32, 93, 138, 0.12);
+	border-radius: 14px;
+	padding: 20px;
+	box-shadow: var(--rmf-shadow-sm);
+}
+
+.trust-item strong {
+	display: block;
+	font-family: "Sora", "Segoe UI", sans-serif;
+	font-size: 1.8rem;
+	line-height: 1.1;
+	color: var(--rmf-brand-dark);
+}
+
+.trust-item span {
+	display: block;
+	margin-top: 8px;
+	color: var(--rmf-muted);
+	font-size: 0.95rem;
+}
+
+.logo-wall {
+	display: grid;
+	grid-template-columns: repeat(5, minmax(0, 1fr));
+	gap: 10px;
+	margin-top: 20px;
+}
+
+.logo-wall span {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 12px 14px;
+	border: 1px dashed rgba(32, 93, 138, 0.25);
+	border-radius: 999px;
+	background: rgba(255, 255, 255, 0.8);
+	font-size: 0.82rem;
+	font-weight: 700;
+	letter-spacing: 0.02em;
+	color: var(--rmf-brand);
+	text-transform: uppercase;
 }
 
 .btn {
@@ -588,6 +673,14 @@ h4 { animation-delay: 0.4s; }
 		grid-template-columns: 1fr 1fr;
 	}
 
+	.trust-grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.logo-wall {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+
 	.two-col,
 	.content-grid,
 	.footer-grid {
@@ -632,6 +725,11 @@ h4 { animation-delay: 0.4s; }
 
 	.hero {
 		padding-top: 86px;
+	}
+
+	.trust-grid,
+	.logo-wall {
+		grid-template-columns: 1fr;
 	}
 }
 
