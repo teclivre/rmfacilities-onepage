@@ -202,6 +202,7 @@ add_action( 'wp_enqueue_scripts', 'rmf_dequeue_admin_styles', 200 );
 
 /**
  * Remove WPForms JS/CSS de páginas sem formulário.
+ * Remove também fontes duplicadas e Font Awesome bloqueante.
  */
 function rmf_dequeue_wpforms() {
 	global $post;
@@ -209,15 +210,31 @@ function rmf_dequeue_wpforms() {
 		$has_form = has_shortcode( $post->post_content, 'wpforms' )
 			|| has_block( 'wpforms/form-selector', $post );
 		if ( $has_form ) {
-			return; // mantém
+			wp_dequeue_style( 'rmf-fonts' );   // remove duplicata - já carregamos via preload
+			return;
 		}
 	}
 	wp_dequeue_script( 'wpforms' );
 	wp_dequeue_script( 'wpforms-gutenberg-form-selector' );
 	wp_dequeue_style( 'wpforms-full' );
 	wp_dequeue_style( 'wpforms-base' );
+
+	// Remove fontes duplicadas (carregamos via preload em rmf_add_preload_hints)
+	wp_dequeue_style( 'rmf-fonts' );
+
+	// Font Awesome do maxcdn é render-blocking; carrega via preload async
+	wp_dequeue_style( 'font-awesome' );
 }
 add_action( 'wp_enqueue_scripts', 'rmf_dequeue_wpforms', 100 );
+
+/**
+ * Recarrega Font Awesome de forma não-bloqueante (preload + noscript).
+ */
+function rmf_preload_font_awesome() {
+	echo '<link rel="preload" as="style" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" onload="this.onload=null;this.rel=\'stylesheet\'">' . "\n";
+	echo '<noscript><link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"></noscript>' . "\n";
+}
+add_action( 'wp_head', 'rmf_preload_font_awesome', 5 );
 
 function rmf_resource_hints( $urls, $relation_type ) {
 	// Limit preconnect to 2 most critical origins (PageSpeed warns about > 4)
@@ -266,31 +283,16 @@ function rmf_defer_scripts( $tag, $handle, $src ) {
 add_filter( 'script_loader_tag', 'rmf_defer_scripts', 10, 3 );
 
 /**
- * Carrega CSS não críticos de forma assíncrona (não bloqueiam o render).
- * Usa técnica: media="print" onload="this.media='all'"
+ * Remove Cookie Law Info CSS do head — o plugin injeta o CSS inline via JS.
+ * Carregar o arquivo CSS externo é redundante e render-blocking.
+ * Remover evita CLS (o banner só aparece após JS carregar, não antes).
  */
-function rmf_async_styles( $tag, $handle, $href, $media ) {
-	// Estilos que podem carregar de forma assíncrona (não impactam LCP/FCP)
-	$async_styles = array(
-		'cookie-law-info',
-		'cookie-law-info-public',
-		'cli-style',
-		'wpforms-full',
-		'wpforms-base',
-	);
-
-	if ( in_array( $handle, $async_styles, true ) && 'all' === $media ) {
-		return sprintf(
-			'<link rel="preload" as="style" id="%s-css" href="%s" media="print" onload="this.media=\'all\'" />' . "\n" .
-			'<noscript><link rel="stylesheet" href="%s" /></noscript>' . "\n",
-			esc_attr( $handle ),
-			esc_url( $href ),
-			esc_url( $href )
-		);
-	}
-	return $tag;
+function rmf_dequeue_cli_css() {
+	wp_dequeue_style( 'cookie-law-info' );
+	wp_dequeue_style( 'cookie-law-info-public' );
+	wp_dequeue_style( 'cli-style' );
 }
-add_filter( 'style_loader_tag', 'rmf_async_styles', 10, 4 );
+add_action( 'wp_enqueue_scripts', 'rmf_dequeue_cli_css', 100 );
 
 /**
  * Força o EWWW Image Optimizer a servir WebP quando suportado.
