@@ -38,7 +38,7 @@ function rmf_theme_setup() {
 add_action( 'after_setup_theme', 'rmf_theme_setup' );
 
 function rmf_enqueue_assets() {
-	$version = wp_get_theme()->get( 'Version' );
+	$version  = wp_get_theme()->get( 'Version' );
 	$font_url = 'https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap';
 
 	wp_enqueue_style( 'rmf-fonts', $font_url, array(), null );
@@ -47,6 +47,47 @@ function rmf_enqueue_assets() {
 	wp_enqueue_script( 'rmf-theme', get_template_directory_uri() . '/assets/js/theme.js', array(), $version, true );
 }
 add_action( 'wp_enqueue_scripts', 'rmf_enqueue_assets' );
+
+/**
+ * Remove scripts de plugins que nao sao necessarios em todas as paginas.
+ * Contact Form 7 e dk-pdf so devem carregar onde sao usados.
+ */
+function rmf_dequeue_unnecessary_scripts() {
+	if ( ! is_page( array( 'contato', 'vagas', 'cadastro-candidato' ) ) && ! is_singular() ) {
+		wp_dequeue_script( 'contact-form-7' );
+		wp_dequeue_script( 'swv' );
+		wp_dequeue_style( 'contact-form-7' );
+	}
+
+	// dk-pdf so e necessario em posts/paginas que tenham o shortcode
+	global $post;
+	if ( ! is_singular() || ( is_a( $post, 'WP_Post' ) && ! has_shortcode( $post->post_content, 'dkpdf-button' ) ) ) {
+		wp_dequeue_script( 'dkpdf-frontend' );
+		wp_dequeue_style( 'dkpdf-frontend' );
+	}
+}
+add_action( 'wp_enqueue_scripts', 'rmf_dequeue_unnecessary_scripts', 100 );
+
+/**
+ * Adiciona preload da fonte principal para acelerar renderizacao.
+ */
+function rmf_add_preload_hints() {
+	echo '<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Sora:wght@700;800&display=swap">' . "\n";
+}
+add_action( 'wp_head', 'rmf_add_preload_hints', 1 );
+
+/**
+ * Remove o jQuery Migrate em producao (nao e necessario para o tema).
+ */
+function rmf_remove_jquery_migrate( $scripts ) {
+	if ( ! is_admin() && isset( $scripts->registered['jquery'] ) ) {
+		$script = $scripts->registered['jquery'];
+		if ( $script->deps ) {
+			$script->deps = array_diff( $script->deps, array( 'jquery-migrate' ) );
+		}
+	}
+}
+add_filter( 'wp_default_scripts', 'rmf_remove_jquery_migrate' );
 
 function rmf_resource_hints( $urls, $relation_type ) {
 	if ( 'preconnect' === $relation_type ) {

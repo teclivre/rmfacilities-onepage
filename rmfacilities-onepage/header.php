@@ -39,6 +39,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 						class="site-logo-img"
 						width="180"
 						height="60"
+						fetchpriority="high"
+						decoding="async"
 					/>
 				</a>
 				<?php
