@@ -370,16 +370,23 @@ add_action( 'wp_enqueue_scripts', 'rmf_dequeue_elementor_assets', 9999 );
 
 /**
  * Define headers de cache para Cloudflare e browsers.
- * s-maxage instrui o CDN (Cloudflare) a cachear HTML por 1 hora.
- * max-age define cache no browser por 5 minutos.
+ * Usa send_headers para tentar sobrescrever o cabeçalho do WP Super Cache.
  */
-add_filter( 'wp_headers', function( $headers ) {
-	if ( ! is_admin() && ! is_user_logged_in() ) {
-		$headers['Cache-Control'] = 'public, max-age=300, s-maxage=3600';
-		$headers['Vary']          = 'Accept-Encoding';
+function rmf_send_cache_headers() {
+	if ( is_admin() || is_user_logged_in() ) {
+		return;
 	}
-	return $headers;
-}, 9999 );
+
+	if ( function_exists( 'header_remove' ) ) {
+		header_remove( 'Cache-Control' );
+		header_remove( 'Pragma' );
+		header_remove( 'Expires' );
+	}
+
+	header( 'Cache-Control: public, max-age=300, s-maxage=3600' );
+	header( 'Vary: Accept-Encoding' );
+}
+add_action( 'send_headers', 'rmf_send_cache_headers', 9999 );
 
 function rmf_register_sidebar() {
 	register_sidebar(
