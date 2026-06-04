@@ -186,21 +186,74 @@ function rmf_dequeue_admin_styles() {
 }
 add_action( 'wp_enqueue_scripts', 'rmf_dequeue_admin_styles', 200 );
 
-function rmf_resource_hints( $urls, $relation_type ) {
-	if ( 'dns-prefetch' === $relation_type ) {
-		// Pré-conexão com serviços de terceiros usados no site
-		$urls[] = 'https://pagead2.googlesyndication.com';
-		$urls[] = 'https://www.google-analytics.com';
-		$urls[] = 'https://connect.facebook.net';
-		$urls[] = 'https://wa.me';
+/**
+ * Remove WPForms JS/CSS de páginas sem formulário.
+ */
+function rmf_dequeue_wpforms() {
+	global $post;
+	if ( is_singular() && is_a( $post, 'WP_Post' ) ) {
+		$has_form = has_shortcode( $post->post_content, 'wpforms' )
+			|| has_block( 'wpforms/form-selector', $post );
+		if ( $has_form ) {
+			return; // mantém
+		}
 	}
+	wp_dequeue_script( 'wpforms' );
+	wp_dequeue_script( 'wpforms-gutenberg-form-selector' );
+	wp_dequeue_style( 'wpforms-full' );
+	wp_dequeue_style( 'wpforms-base' );
+}
+add_action( 'wp_enqueue_scripts', 'rmf_dequeue_wpforms', 100 );
+
+function rmf_resource_hints( $urls, $relation_type ) {
+	// Limit preconnect to 2 most critical origins (PageSpeed warns about > 4)
 	if ( 'preconnect' === $relation_type ) {
 		$urls[] = array( 'href' => 'https://fonts.googleapis.com' );
 		$urls[] = array( 'href' => 'https://fonts.gstatic.com', 'crossorigin' => 'anonymous' );
 	}
+	// DNS-prefetch para terceiros (mais leve que preconnect)
+	if ( 'dns-prefetch' === $relation_type ) {
+		$urls[] = 'https://www.google-analytics.com';
+		$urls[] = 'https://connect.facebook.net';
+	}
 	return $urls;
 }
 add_filter( 'wp_resource_hints', 'rmf_resource_hints', 10, 2 );
+
+/**
+ * Adiciona defer/async em scripts de plugins não críticos para reduzir TBT.
+ * Scripts do tema e admin não são afetados.
+ */
+function rmf_defer_scripts( $tag, $handle, $src ) {
+	// Scripts que podem carregar com defer (não são críticos para render inicial)
+	$defer_scripts = array(
+		'wpforms',
+		'wpforms-gutenberg-form-selector',
+		'cookie-law-info',
+		'cookie-law-info-ccpa',
+		'joinchat',
+		'joinchat-lite',
+		'ad-inserter',
+		'disqus-embed',
+		'disqusloader',
+	);
+
+	if ( in_array( $handle, $defer_scripts, true ) ) {
+		// Adiciona defer somente se ainda não tiver defer ou async
+		if ( false === strpos( $tag, ' defer' ) && false === strpos( $tag, ' async' ) ) {
+			$tag = str_replace( ' src=', ' defer src=', $tag );
+		}
+	}
+	return $tag;
+}
+add_filter( 'script_loader_tag', 'rmf_defer_scripts', 10, 3 );
+
+/**
+ * Força o EWWW Image Optimizer a servir WebP quando suportado.
+ * Também ativa lazy load nativo nos tamanhos grandes.
+ */
+add_filter( 'ewww_image_optimizer_webp', '__return_true' );
+add_filter( 'ewww_image_optimizer_lazy_load', '__return_true' );
 
 function rmf_register_sidebar() {
 	register_sidebar(
