@@ -95,7 +95,8 @@ function rmf_add_preload_hints() {
 add_action( 'wp_head', 'rmf_add_preload_hints', 1 );
 
 /**
- * Remove o jQuery Migrate em producao (nao e necessario para o tema).
+ * Remove o jQuery Migrate e move jQuery para o rodapé (não-bloqueante).
+ * jQuery no rodapé reduz o render-blocking time em ~400-800ms no mobile.
  */
 function rmf_remove_jquery_migrate( $scripts ) {
 	if ( ! is_admin() && isset( $scripts->registered['jquery'] ) ) {
@@ -106,6 +107,19 @@ function rmf_remove_jquery_migrate( $scripts ) {
 	}
 }
 add_filter( 'wp_default_scripts', 'rmf_remove_jquery_migrate' );
+
+/**
+ * Move jQuery core para o rodapé (group=1) para não bloquear o render.
+ * Só aplica no front-end; admin continua no head.
+ */
+function rmf_jquery_to_footer() {
+	if ( is_admin() ) {
+		return;
+	}
+	wp_scripts()->add_data( 'jquery', 'group', 1 );
+	wp_scripts()->add_data( 'jquery-core', 'group', 1 );
+}
+add_action( 'wp_enqueue_scripts', 'rmf_jquery_to_footer', 1 );
 
 /**
  * Remove numero de versao do WP de scripts e styles (segurança + cache).
@@ -236,6 +250,9 @@ function rmf_defer_scripts( $tag, $handle, $src ) {
 		'ad-inserter',
 		'disqus-embed',
 		'disqusloader',
+		'google-tag-manager',
+		'gtag',
+		'ga',
 	);
 
 	if ( in_array( $handle, $defer_scripts, true ) ) {
@@ -247,6 +264,33 @@ function rmf_defer_scripts( $tag, $handle, $src ) {
 	return $tag;
 }
 add_filter( 'script_loader_tag', 'rmf_defer_scripts', 10, 3 );
+
+/**
+ * Carrega CSS não críticos de forma assíncrona (não bloqueiam o render).
+ * Usa técnica: media="print" onload="this.media='all'"
+ */
+function rmf_async_styles( $tag, $handle, $href, $media ) {
+	// Estilos que podem carregar de forma assíncrona (não impactam LCP/FCP)
+	$async_styles = array(
+		'cookie-law-info',
+		'cookie-law-info-public',
+		'cli-style',
+		'wpforms-full',
+		'wpforms-base',
+	);
+
+	if ( in_array( $handle, $async_styles, true ) && 'all' === $media ) {
+		return sprintf(
+			'<link rel="preload" as="style" id="%s-css" href="%s" media="print" onload="this.media=\'all\'" />' . "\n" .
+			'<noscript><link rel="stylesheet" href="%s" /></noscript>' . "\n",
+			esc_attr( $handle ),
+			esc_url( $href ),
+			esc_url( $href )
+		);
+	}
+	return $tag;
+}
+add_filter( 'style_loader_tag', 'rmf_async_styles', 10, 4 );
 
 /**
  * Força o EWWW Image Optimizer a servir WebP quando suportado.
