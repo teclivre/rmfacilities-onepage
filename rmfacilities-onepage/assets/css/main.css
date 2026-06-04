@@ -926,6 +926,77 @@ h4 { animation-delay: 0.4s; }
 	z-index: 1000;
 }
 
+/* ===== Breadcrumb ===== */
+.breadcrumb {
+	margin-bottom: 12px;
+}
+
+.breadcrumb-list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px;
+	font-size: 0.82rem;
+	color: var(--rmf-muted);
+}
+
+.breadcrumb-list li + li::before {
+	content: '›';
+	margin-right: 4px;
+	color: var(--rmf-muted);
+}
+
+.breadcrumb-list a {
+	color: var(--rmf-muted);
+	text-decoration: none;
+	transition: color 0.2s;
+}
+
+.breadcrumb-list a:hover {
+	color: var(--rmf-accent);
+}
+
+/* ===== Navegação prev/next entre posts ===== */
+.post-navigation {
+	display: flex;
+	gap: 16px;
+	margin-top: 24px;
+	padding-top: 20px;
+	border-top: 1px solid var(--rmf-border);
+}
+
+.post-navigation .nav-previous,
+.post-navigation .nav-next {
+	flex: 1;
+	font-size: 0.88rem;
+}
+
+.post-navigation .nav-next {
+	text-align: right;
+}
+
+.post-navigation span {
+	display: block;
+	color: var(--rmf-muted);
+	margin-bottom: 4px;
+	font-size: 0.8rem;
+}
+
+.post-navigation a {
+	color: var(--rmf-ink);
+	text-decoration: none;
+	font-weight: 600;
+	transition: color 0.2s;
+}
+
+.post-navigation a:hover {
+	color: var(--rmf-accent);
+}
+
+
+
 @media (max-width: 960px) {
 	.cards,
 	.cards-4 {

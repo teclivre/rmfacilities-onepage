@@ -38,12 +38,12 @@ function rmf_theme_setup() {
 add_action( 'after_setup_theme', 'rmf_theme_setup' );
 
 function rmf_enqueue_assets() {
-	$version  = wp_get_theme()->get( 'Version' );
-	$font_url = 'https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap';
+	$version = wp_get_theme()->get( 'Version' );
 
-	wp_enqueue_style( 'rmf-fonts', $font_url, array(), null );
+	// Fonte carregada via preload + noscript no wp_head para não bloquear render
+	// (ver rmf_add_preload_hints)
 	wp_enqueue_style( 'rmf-style', get_stylesheet_uri(), array(), $version );
-	wp_enqueue_style( 'rmf-main', get_template_directory_uri() . '/assets/css/main.css', array( 'rmf-fonts', 'rmf-style' ), $version );
+	wp_enqueue_style( 'rmf-main', get_template_directory_uri() . '/assets/css/main.css', array( 'rmf-style' ), $version );
 	wp_enqueue_script( 'rmf-theme', get_template_directory_uri() . '/assets/js/theme.js', array(), $version, true );
 }
 add_action( 'wp_enqueue_scripts', 'rmf_enqueue_assets' );
@@ -53,26 +53,44 @@ add_action( 'wp_enqueue_scripts', 'rmf_enqueue_assets' );
  * Contact Form 7 e dk-pdf so devem carregar onde sao usados.
  */
 function rmf_dequeue_unnecessary_scripts() {
-	if ( ! is_page( array( 'contato', 'vagas', 'cadastro-candidato' ) ) && ! is_singular() ) {
+	global $post;
+	$is_contact_page = is_page( array( 'contato', 'vagas', 'cadastro-candidato' ) );
+	$has_cf7 = is_a( $post, 'WP_Post' ) && (
+		has_shortcode( $post->post_content, 'contact-form-7' ) ||
+		has_shortcode( $post->post_content, 'wpcf7' )
+	);
+
+	if ( ! $is_contact_page && ! $has_cf7 ) {
 		wp_dequeue_script( 'contact-form-7' );
 		wp_dequeue_script( 'swv' );
 		wp_dequeue_style( 'contact-form-7' );
+		wp_dequeue_style( 'contact-form-7-rtl' );
 	}
 
 	// dk-pdf so e necessario em posts/paginas que tenham o shortcode
-	global $post;
 	if ( ! is_singular() || ( is_a( $post, 'WP_Post' ) && ! has_shortcode( $post->post_content, 'dkpdf-button' ) ) ) {
 		wp_dequeue_script( 'dkpdf-frontend' );
 		wp_dequeue_style( 'dkpdf-frontend' );
+	}
+
+	// UAG (Ultimate Addons for Gutenberg) - só em páginas com blocos UAG
+	if ( ! is_singular() || ( is_a( $post, 'WP_Post' ) && strpos( $post->post_content, 'uagb' ) === false ) ) {
+		wp_dequeue_style( 'zip-ai-sidebar-build' );
+		wp_dequeue_style( 'zip-ai-sidebar-font' );
 	}
 }
 add_action( 'wp_enqueue_scripts', 'rmf_dequeue_unnecessary_scripts', 100 );
 
 /**
- * Adiciona preload da fonte principal para acelerar renderizacao.
+ * Preconnect e preload correto para fontes do Google.
  */
 function rmf_add_preload_hints() {
-	echo '<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Sora:wght@700;800&display=swap">' . "\n";
+	// Preload do CSS de fontes - informa ao browser para buscar cedo
+	echo '<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Sora:wght@700;800&display=swap" onload="this.onload=null;this.rel=\'stylesheet\'" crossorigin>' . "\n";
+	// Noscript fallback
+	echo '<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Sora:wght@700;800&display=swap"></noscript>' . "\n";
+	// Link para sitemap no head (sinal de indexação)
+	echo '<link rel="sitemap" type="application/xml" title="Sitemap" href="' . esc_url( home_url( '/sitemap_index.xml' ) ) . '">' . "\n";
 }
 add_action( 'wp_head', 'rmf_add_preload_hints', 1 );
 
@@ -89,15 +107,97 @@ function rmf_remove_jquery_migrate( $scripts ) {
 }
 add_filter( 'wp_default_scripts', 'rmf_remove_jquery_migrate' );
 
-function rmf_resource_hints( $urls, $relation_type ) {
-	if ( 'preconnect' === $relation_type ) {
-		$urls[] = 'https://fonts.googleapis.com';
-		$urls[] = array(
-			'href'        => 'https://fonts.gstatic.com',
-			'crossorigin' => 'anonymous',
-		);
+/**
+ * Remove numero de versao do WP de scripts e styles (segurança + cache).
+ */
+function rmf_remove_wp_version_from_assets( $src ) {
+	if ( strpos( $src, 'ver=' ) ) {
+		$src = remove_query_arg( 'ver', $src );
 	}
+	return $src;
+}
+add_filter( 'style_loader_src', 'rmf_remove_wp_version_from_assets', 9999 );
+add_filter( 'script_loader_src', 'rmf_remove_wp_version_from_assets', 9999 );
 
+/**
+ * Remove o generator meta tag (nao expõe versao do WP).
+ */
+remove_action( 'wp_head', 'wp_generator' );
+
+/**
+ * Desativa emojis do WordPress (economiza requests e JS desnecessario).
+ */
+function rmf_disable_emojis() {
+	remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
+	remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
+	remove_action( 'wp_print_styles', 'print_emoji_styles' );
+	remove_action( 'admin_print_styles', 'print_emoji_styles' );
+	remove_filter( 'the_content_feed', 'wp_staticize_emoji' );
+	remove_filter( 'comment_text_rss', 'wp_staticize_emoji' );
+	remove_filter( 'wp_mail', 'wp_staticize_emoji_for_email' );
+	add_filter( 'tiny_mce_plugins', function( $plugins ) {
+		return is_array( $plugins ) ? array_diff( $plugins, array( 'wpemoji' ) ) : array();
+	} );
+	add_filter( 'wp_resource_hints', function( $urls, $relation_type ) {
+		if ( 'dns-prefetch' === $relation_type ) {
+			$emoji_url = 'https://s.w.org/images/core/emoji/2/svg/';
+			$urls = array_diff( $urls, array( $emoji_url ) );
+		}
+		return $urls;
+	}, 10, 2 );
+}
+add_action( 'init', 'rmf_disable_emojis' );
+
+/**
+ * Desativa oEmbed / WordPress Embeds (remove request extra).
+ */
+function rmf_disable_embeds() {
+	// Remove endpoint REST de oEmbed
+	remove_action( 'rest_api_init', 'wp_oembed_register_route' );
+	// Remove filtro de descoberta de oEmbed
+	remove_filter( 'oembed_dataparse', 'wp_filter_oembed_result', 10 );
+	// Remove link no head
+	remove_action( 'wp_head', 'wp_oembed_add_discovery_links' );
+	remove_action( 'wp_head', 'wp_oembed_add_host_js' );
+	// Desregistra scripts de embed
+	add_action( 'wp_enqueue_scripts', function() {
+		wp_deregister_script( 'wp-embed' );
+	} );
+}
+add_action( 'init', 'rmf_disable_embeds' );
+
+/**
+ * Desativa XML-RPC (nao usado, melhora segurança e performance).
+ */
+add_filter( 'xmlrpc_enabled', '__return_false' );
+
+/**
+ * Desativa CSS de plugins admin que nao sao necessarios no front-end.
+ */
+function rmf_dequeue_admin_styles() {
+	if ( is_admin_bar_showing() ) return; // Só remove se não há admin bar
+	// WP Mail SMTP admin bar CSS
+	wp_dequeue_style( 'wp-mail-smtp-admin-bar' );
+	// WPForms admin bar
+	wp_dequeue_style( 'wpforms-admin-bar' );
+	// Rank Math analytics CSS
+	wp_dequeue_style( 'rank-math-pro-analytics' );
+	wp_dequeue_style( 'rank-math-analytics' );
+}
+add_action( 'wp_enqueue_scripts', 'rmf_dequeue_admin_styles', 200 );
+
+function rmf_resource_hints( $urls, $relation_type ) {
+	if ( 'dns-prefetch' === $relation_type ) {
+		// Pré-conexão com serviços de terceiros usados no site
+		$urls[] = 'https://pagead2.googlesyndication.com';
+		$urls[] = 'https://www.google-analytics.com';
+		$urls[] = 'https://connect.facebook.net';
+		$urls[] = 'https://wa.me';
+	}
+	if ( 'preconnect' === $relation_type ) {
+		$urls[] = array( 'href' => 'https://fonts.googleapis.com' );
+		$urls[] = array( 'href' => 'https://fonts.gstatic.com', 'crossorigin' => 'anonymous' );
+	}
 	return $urls;
 }
 add_filter( 'wp_resource_hints', 'rmf_resource_hints', 10, 2 );
