@@ -290,6 +290,7 @@ add_filter( 'script_loader_tag', 'rmf_defer_scripts', 10, 3 );
 function rmf_dequeue_cli_css() {
 	wp_dequeue_style( 'cookie-law-info' );
 	wp_dequeue_style( 'cookie-law-info-public' );
+	wp_dequeue_style( 'cookie-law-info-gdpr' );
 	wp_dequeue_style( 'cli-style' );
 }
 add_action( 'wp_enqueue_scripts', 'rmf_dequeue_cli_css', 100 );
