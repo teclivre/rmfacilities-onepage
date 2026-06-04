@@ -653,6 +653,7 @@ h4 { animation-delay: 0.4s; }
 .highlight-box,
 .post-card-list,
 .post-single,
+.page-content,
 .sidebar-area,
 .widget,
 .no-results,
@@ -706,8 +707,83 @@ h4 { animation-delay: 0.4s; }
 
 .post-card h3,
 .post-card-list h2,
-.post-single h1 {
+.post-single h1,
+.page-content h1 {
 	margin-bottom: 8px;
+}
+
+/* ===== Tipografia interna de posts e páginas ===== */
+.post-single h2,
+.post-single h3,
+.post-single h4,
+.page-content h2,
+.page-content h3,
+.page-content h4 {
+	color: var(--rmf-ink);
+	line-height: 1.35;
+	margin: 28px 0 10px;
+}
+
+.post-single h2,
+.page-content h2 {
+	font-size: 1.35rem;
+	border-left: 3px solid var(--rmf-accent);
+	padding-left: 12px;
+}
+
+.post-single h3,
+.page-content h3 {
+	font-size: 1.1rem;
+	color: var(--rmf-accent);
+}
+
+.post-single p,
+.post-single li,
+.page-content p,
+.page-content li {
+	line-height: 1.75;
+	margin-bottom: 12px;
+}
+
+.post-single ul,
+.post-single ol,
+.page-content ul,
+.page-content ol {
+	padding-left: 20px;
+	margin-bottom: 16px;
+}
+
+.post-single a,
+.page-content a {
+	color: var(--rmf-accent);
+	text-decoration: none;
+	border-bottom: 1px solid transparent;
+	transition: border-color 0.2s;
+}
+
+.post-single a:hover,
+.page-content a:hover {
+	border-bottom-color: var(--rmf-accent);
+}
+
+.post-single img,
+.page-content img {
+	max-width: 100%;
+	height: auto;
+	border-radius: 10px;
+	margin: 12px 0;
+}
+
+.post-single strong,
+.page-content strong {
+	color: var(--rmf-ink);
+	font-weight: 700;
+}
+
+/* Separador visual entre seções */
+.post-single h2 + p,
+.page-content h2 + p {
+	margin-top: 6px;
 }
 
 .post-meta {
