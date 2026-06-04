@@ -741,6 +741,68 @@ h4 { animation-delay: 0.4s; }
 	margin-bottom: 8px;
 }
 
+.sidebar-cta {
+	background: var(--rmf-navy-mid, #0e2a42);
+	border: 1px solid rgba(255,255,255,.1);
+	border-radius: 12px;
+	padding: 24px;
+	margin-bottom: 24px;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.sidebar-cta h3 {
+	font-size: 1.1rem;
+	line-height: 1.4;
+	margin: 0;
+}
+
+.sidebar-cta p {
+	font-size: .9rem;
+	color: var(--rmf-text-muted, #b0c4d8);
+	margin: 0;
+}
+
+.sidebar-cta .btn {
+	text-align: center;
+}
+
+.sidebar-wpp {
+	margin-top: 4px;
+}
+
+.sidebar-services {
+	background: rgba(255,255,255,.04);
+	border: 1px solid rgba(255,255,255,.08);
+	border-radius: 12px;
+	padding: 20px 24px;
+}
+
+.sidebar-services .kicker {
+	margin-bottom: 12px;
+}
+
+.sidebar-services ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.sidebar-services ul a {
+	color: var(--rmf-text, #e0eaf4);
+	text-decoration: none;
+	font-size: .95rem;
+	transition: color .2s;
+}
+
+.sidebar-services ul a:hover {
+	color: var(--rmf-accent, #f0a500);
+}
+
 .site-footer {
 	margin-top: 64px;
 	padding-top: 48px;
