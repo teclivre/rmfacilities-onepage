@@ -229,10 +229,11 @@ add_action( 'wp_enqueue_scripts', 'rmf_dequeue_wpforms', 100 );
 
 /**
  * Recarrega Font Awesome de forma não-bloqueante (preload + noscript).
+ * Usa HTTPS para evitar mixed-content warning (Best Practices).
  */
 function rmf_preload_font_awesome() {
-	echo '<link rel="preload" as="style" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" onload="this.onload=null;this.rel=\'stylesheet\'">' . "\n";
-	echo '<noscript><link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"></noscript>' . "\n";
+	echo '<link rel="preload" as="style" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" onload="this.onload=null;this.rel=\'stylesheet\'">' . "\n";
+	echo '<noscript><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"></noscript>' . "\n";
 }
 add_action( 'wp_head', 'rmf_preload_font_awesome', 5 );
 
