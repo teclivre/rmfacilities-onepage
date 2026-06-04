@@ -19,7 +19,7 @@ jobs:
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./rmfacilities-onepage/
-          server-dir: /public_html/wp-content/themes/rmfacilities-onepage/
+          server-dir: /rmfacilities.com.br/wp-content/themes/rmfacilities-onepage/
           exclude: |
             **/.git*
             **/.git*/**
