@@ -91,6 +91,14 @@ function rmf_add_preload_hints() {
 	echo '<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Sora:wght@700;800&display=swap"></noscript>' . "\n";
 	// Link para sitemap no head (sinal de indexação)
 	echo '<link rel="sitemap" type="application/xml" title="Sitemap" href="' . esc_url( home_url( '/sitemap_index.xml' ) ) . '">' . "\n";
+	// Preload do logo (LCP element) com alta prioridade
+	$logo_id = get_theme_mod( 'custom_logo' );
+	if ( $logo_id ) {
+		$logo_url = wp_get_attachment_image_url( $logo_id, 'full' );
+		if ( $logo_url ) {
+			echo '<link rel="preload" as="image" href="' . esc_url( $logo_url ) . '" fetchpriority="high">' . "\n";
+		}
+	}
 }
 add_action( 'wp_head', 'rmf_add_preload_hints', 1 );
 
@@ -286,15 +294,19 @@ add_filter( 'script_loader_tag', 'rmf_defer_scripts', 10, 3 );
 /**
  * Remove Cookie Law Info CSS do head — o plugin injeta o CSS inline via JS.
  * Carregar o arquivo CSS externo é redundante e render-blocking.
- * Remover evita CLS (o banner só aparece após JS carregar, não antes).
+ * Usa deregister + dequeue em prioridade máxima para garantir remoção.
  */
 function rmf_dequeue_cli_css() {
 	wp_dequeue_style( 'cookie-law-info' );
+	wp_deregister_style( 'cookie-law-info' );
 	wp_dequeue_style( 'cookie-law-info-public' );
+	wp_deregister_style( 'cookie-law-info-public' );
 	wp_dequeue_style( 'cookie-law-info-gdpr' );
+	wp_deregister_style( 'cookie-law-info-gdpr' );
 	wp_dequeue_style( 'cli-style' );
+	wp_deregister_style( 'cli-style' );
 }
-add_action( 'wp_enqueue_scripts', 'rmf_dequeue_cli_css', 100 );
+add_action( 'wp_enqueue_scripts', 'rmf_dequeue_cli_css', 9999 );
 
 /**
  * Força o EWWW Image Optimizer a servir WebP quando suportado.
@@ -302,6 +314,46 @@ add_action( 'wp_enqueue_scripts', 'rmf_dequeue_cli_css', 100 );
  */
 add_filter( 'ewww_image_optimizer_webp', '__return_true' );
 add_filter( 'ewww_image_optimizer_lazy_load', '__return_true' );
+
+/**
+ * Remove assets do Elementor, UAG e Premium Addons no front-end.
+ * Estes plugins estão instalados mas o Elementor não é o tema ativo.
+ */
+function rmf_dequeue_elementor_assets() {
+	// Elementor frontend
+	wp_dequeue_style( 'elementor-frontend' );
+	wp_deregister_style( 'elementor-frontend' );
+	wp_dequeue_style( 'elementor-post-' . get_the_ID() );
+	wp_dequeue_style( 'elementor-animations' );
+	wp_deregister_style( 'elementor-animations' );
+	wp_dequeue_style( 'elementor-icons' );
+	wp_deregister_style( 'elementor-icons' );
+	wp_dequeue_script( 'elementor-frontend' );
+	wp_deregister_script( 'elementor-frontend' );
+	// UAG / Brainstorm Force assets
+	wp_dequeue_style( 'uagb-style' );
+	wp_dequeue_style( 'uagb-select2-style' );
+	wp_dequeue_style( 'uae-styles' );
+	wp_dequeue_script( 'uagb-script' );
+	// Premium Addons for Elementor
+	wp_dequeue_style( 'pa-general-style' );
+	wp_dequeue_style( 'pa-modules-style' );
+	wp_dequeue_script( 'pa-general-script' );
+}
+add_action( 'wp_enqueue_scripts', 'rmf_dequeue_elementor_assets', 9999 );
+
+/**
+ * Define headers de cache para Cloudflare e browsers.
+ * s-maxage instrui o CDN (Cloudflare) a cachear HTML por 1 hora.
+ * max-age define cache no browser por 5 minutos.
+ */
+add_filter( 'wp_headers', function( $headers ) {
+	if ( ! is_admin() && ! is_user_logged_in() ) {
+		$headers['Cache-Control'] = 'public, max-age=300, s-maxage=3600';
+		$headers['Vary']          = 'Accept-Encoding';
+	}
+	return $headers;
+}, 9999 );
 
 function rmf_register_sidebar() {
 	register_sidebar(
