@@ -93,15 +93,3 @@ get_header();
 
 <?php
 get_footer();
-					</footer>
-				</article>
-
-				<?php comments_template(); ?>
-			<?php endwhile; ?>
-		</div>
-		<?php get_sidebar(); ?>
-	</div>
-</section>
-
-<?php
-get_footer();

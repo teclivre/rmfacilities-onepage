@@ -343,8 +343,8 @@ function rmf_dequeue_elementor_assets() {
 add_action( 'wp_enqueue_scripts', 'rmf_dequeue_elementor_assets', 9999 );
 
 /**
- * Define headers de cache para Cloudflare e browsers.
- * Usa send_headers para tentar sobrescrever o cabeçalho do WP Super Cache.
+ * Remove scripts de terceiros que entram fora do pipeline de enqueue normal.
+ * ob_start removido — conflitava com plugins de cache.
  */
 function rmf_send_cache_headers() {
 	if ( is_admin() || is_user_logged_in() ) {
