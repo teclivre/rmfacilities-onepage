@@ -48,38 +48,7 @@ function rmf_enqueue_assets() {
 }
 add_action( 'wp_enqueue_scripts', 'rmf_enqueue_assets' );
 
-/**
- * Remove scripts de plugins que nao sao necessarios em todas as paginas.
- * Contact Form 7 e dk-pdf so devem carregar onde sao usados.
- */
-function rmf_dequeue_unnecessary_scripts() {
-	global $post;
-	$is_contact_page = is_page( array( 'contato', 'vagas', 'cadastro-candidato' ) );
-	$has_cf7 = is_a( $post, 'WP_Post' ) && (
-		has_shortcode( $post->post_content, 'contact-form-7' ) ||
-		has_shortcode( $post->post_content, 'wpcf7' )
-	);
 
-	if ( ! $is_contact_page && ! $has_cf7 ) {
-		wp_dequeue_script( 'contact-form-7' );
-		wp_dequeue_script( 'swv' );
-		wp_dequeue_style( 'contact-form-7' );
-		wp_dequeue_style( 'contact-form-7-rtl' );
-	}
-
-	// dk-pdf so e necessario em posts/paginas que tenham o shortcode
-	if ( ! is_singular() || ( is_a( $post, 'WP_Post' ) && ! has_shortcode( $post->post_content, 'dkpdf-button' ) ) ) {
-		wp_dequeue_script( 'dkpdf-frontend' );
-		wp_dequeue_style( 'dkpdf-frontend' );
-	}
-
-	// UAG (Ultimate Addons for Gutenberg) - só em páginas com blocos UAG
-	if ( ! is_singular() || ( is_a( $post, 'WP_Post' ) && strpos( $post->post_content, 'uagb' ) === false ) ) {
-		wp_dequeue_style( 'zip-ai-sidebar-build' );
-		wp_dequeue_style( 'zip-ai-sidebar-font' );
-	}
-}
-add_action( 'wp_enqueue_scripts', 'rmf_dequeue_unnecessary_scripts', 100 );
 
 /**
  * Preconnect e preload correto para fontes do Google.
@@ -197,43 +166,12 @@ add_filter( 'xmlrpc_enabled', '__return_false' );
  * Desativa CSS de plugins admin que nao sao necessarios no front-end.
  */
 function rmf_dequeue_admin_styles() {
-	if ( is_admin_bar_showing() ) return; // Só remove se não há admin bar
-	// WP Mail SMTP admin bar CSS
+	if ( is_admin_bar_showing() ) return;
 	wp_dequeue_style( 'wp-mail-smtp-admin-bar' );
-	// WPForms admin bar
-	wp_dequeue_style( 'wpforms-admin-bar' );
-	// Rank Math analytics CSS
 	wp_dequeue_style( 'rank-math-pro-analytics' );
 	wp_dequeue_style( 'rank-math-analytics' );
 }
 add_action( 'wp_enqueue_scripts', 'rmf_dequeue_admin_styles', 200 );
-
-/**
- * Remove WPForms JS/CSS de páginas sem formulário.
- * Remove também fontes duplicadas e Font Awesome bloqueante.
- */
-function rmf_dequeue_wpforms() {
-	global $post;
-	if ( is_singular() && is_a( $post, 'WP_Post' ) ) {
-		$has_form = has_shortcode( $post->post_content, 'wpforms' )
-			|| has_block( 'wpforms/form-selector', $post );
-		if ( $has_form ) {
-			wp_dequeue_style( 'rmf-fonts' );   // remove duplicata - já carregamos via preload
-			return;
-		}
-	}
-	wp_dequeue_script( 'wpforms' );
-	wp_dequeue_script( 'wpforms-gutenberg-form-selector' );
-	wp_dequeue_style( 'wpforms-full' );
-	wp_dequeue_style( 'wpforms-base' );
-
-	// Remove fontes duplicadas (carregamos via preload em rmf_add_preload_hints)
-	wp_dequeue_style( 'rmf-fonts' );
-
-	// Font Awesome do maxcdn é render-blocking; carrega via preload async
-	wp_dequeue_style( 'font-awesome' );
-}
-add_action( 'wp_enqueue_scripts', 'rmf_dequeue_wpforms', 100 );
 
 /**
  * Recarrega Font Awesome de forma não-bloqueante (preload + noscript).
@@ -267,8 +205,6 @@ add_filter( 'wp_resource_hints', 'rmf_resource_hints', 10, 2 );
 function rmf_defer_scripts( $tag, $handle, $src ) {
 	// Scripts que podem carregar com defer (não são críticos para render inicial)
 	$defer_scripts = array(
-		'wpforms',
-		'wpforms-gutenberg-form-selector',
 		'cookie-law-info',
 		'cookie-law-info-ccpa',
 		'joinchat',
@@ -301,39 +237,7 @@ function rmf_dequeue_cli_css() {
 }
 add_action( 'wp_enqueue_scripts', 'rmf_dequeue_cli_css', 9999 );
 
-/**
- * Força o EWWW Image Optimizer a servir WebP quando suportado.
- * Também ativa lazy load nativo nos tamanhos grandes.
- */
-add_filter( 'ewww_image_optimizer_webp', '__return_true' );
-add_filter( 'ewww_image_optimizer_lazy_load', '__return_true' );
 
-/**
- * Remove assets do Elementor, UAG e Premium Addons no front-end.
- * Estes plugins estão instalados mas o Elementor não é o tema ativo.
- */
-function rmf_dequeue_elementor_assets() {
-	// Elementor frontend
-	wp_dequeue_style( 'elementor-frontend' );
-	wp_deregister_style( 'elementor-frontend' );
-	wp_dequeue_style( 'elementor-post-' . get_the_ID() );
-	wp_dequeue_style( 'elementor-animations' );
-	wp_deregister_style( 'elementor-animations' );
-	wp_dequeue_style( 'elementor-icons' );
-	wp_deregister_style( 'elementor-icons' );
-	wp_dequeue_script( 'elementor-frontend' );
-	wp_deregister_script( 'elementor-frontend' );
-	// UAG / Brainstorm Force assets
-	wp_dequeue_style( 'uagb-style' );
-	wp_dequeue_style( 'uagb-select2-style' );
-	wp_dequeue_style( 'uae-styles' );
-	wp_dequeue_script( 'uagb-script' );
-	// Premium Addons for Elementor
-	wp_dequeue_style( 'pa-general-style' );
-	wp_dequeue_style( 'pa-modules-style' );
-	wp_dequeue_script( 'pa-general-script' );
-}
-add_action( 'wp_enqueue_scripts', 'rmf_dequeue_elementor_assets', 9999 );
 
 /**
  * Remove scripts de terceiros que entram fora do pipeline de enqueue normal.
