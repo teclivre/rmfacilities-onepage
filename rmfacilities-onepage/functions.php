@@ -292,32 +292,6 @@ function rmf_defer_scripts( $tag, $handle, $src ) {
 add_filter( 'script_loader_tag', 'rmf_defer_scripts', 10, 3 );
 
 /**
- * Remove scripts de terceiros que entram fora do pipeline de enqueue normal.
- * Isso corta pixels e snippets do Site Kit/Poptin no HTML inicial.
- */
-function rmf_strip_optional_third_party_scripts( $html ) {
-	if ( is_admin() || wp_doing_ajax() || is_user_logged_in() ) {
-		return $html;
-	}
-
-	$patterns = array(
-		'#<script[^>]*src=["\']https://cdn\.popt\.in/pixel\.js[^"\']*["\'][^>]*></script>#i',
-		'#<script[^>]*src=["\']https://pagead2\.googlesyndication\.com/pagead/js/adsbygoogle\.js[^"\']*["\'][^>]*></script>#i',
-	);
-
-	return preg_replace( $patterns, '', $html );
-}
-
-function rmf_start_output_buffering() {
-	if ( is_admin() || wp_doing_ajax() || is_user_logged_in() ) {
-		return;
-	}
-
-	ob_start( 'rmf_strip_optional_third_party_scripts' );
-}
-add_action( 'template_redirect', 'rmf_start_output_buffering', 0 );
-
-/**
  * Remove Cookie Law Info CSS do head — o plugin injeta o CSS inline via JS.
  * Carregar o arquivo CSS externo é redundante e render-blocking.
  * Usa deregister + dequeue em prioridade máxima para garantir remoção.
