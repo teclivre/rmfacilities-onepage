@@ -606,8 +606,8 @@ function rmf_after_switch_theme_setup() {
 add_action( 'after_switch_theme', 'rmf_after_switch_theme_setup' );
 
 function rmf_handle_contact_form_submission() {
-	if ( ! isset( $_POST['rmf_contact_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['rmf_contact_nonce'] ) ), 'rmf_contact_submit' ) ) {
-		wp_safe_redirect( home_url( '/#contato' ) );
+	if ( ! isset( $_POST['rmf_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['rmf_nonce'] ) ), 'rmf_contact_nonce' ) ) {
+		wp_safe_redirect( home_url( '/#contato?status=erro' ) );
 		exit;
 	}
 
@@ -624,7 +624,7 @@ function rmf_handle_contact_form_submission() {
 	);
 
 	if ( empty( $fields['nome'] ) || empty( $fields['email'] ) || empty( $fields['servico'] ) ) {
-		wp_safe_redirect( home_url( '/#contato' ) );
+		wp_safe_redirect( home_url( '/#contato?status=erro' ) );
 		exit;
 	}
 
@@ -642,10 +642,17 @@ function rmf_handle_contact_form_submission() {
 
 	$headers = array( 'Reply-To: ' . $fields['nome'] . ' <' . $fields['email'] . '>' );
 
-	wp_mail( $to, $subject, $message, $headers );
+	$sent = wp_mail( $to, $subject, $message, $headers );
+
+	// Envia cópia de confirmação para o lead
+	if ( $sent && ! empty( $fields['email'] ) ) {
+		$confirm_subject = 'Recebemos seu contato — RM Facilities';
+		$confirm_message = "Olá, {$fields['nome']}!\n\nRecebemos sua solicitação e entraremos em contato em até 1 dia útil.\n\nServiço de interesse: {$fields['servico']}\n\nAtenciosamente,\nEquipe RM Facilities\ncontato@rmfacilities.com.br | (12) 3042-1799";
+		wp_mail( $fields['email'], $confirm_subject, $confirm_message );
+	}
 
 	$thanks_page_id = (int) get_option( 'rmf_thanks_page_id' );
-	$thanks_url     = $thanks_page_id > 0 ? get_permalink( $thanks_page_id ) : home_url( '/obrigado/' );
+	$thanks_url     = $thanks_page_id > 0 ? get_permalink( $thanks_page_id ) : home_url( '/#contato?status=enviado' );
 
 	wp_safe_redirect( $thanks_url );
 	exit;

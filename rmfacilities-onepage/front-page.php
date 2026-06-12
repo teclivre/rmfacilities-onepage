@@ -170,6 +170,17 @@ $rmf_wpp_url = function_exists( 'rmf_get_whatsapp_url' ) ? rmf_get_whatsapp_url(
 			</div>
 
 			<div class="contact-form-wrap">
+				<?php
+				$rmf_status = isset( $_GET['status'] ) ? sanitize_key( $_GET['status'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification
+				if ( 'enviado' === $rmf_status ) : ?>
+					<div class="rmf-form-notice rmf-form-notice--success" role="alert">
+						✅ <strong>Mensagem enviada!</strong> Retornaremos em até 1 dia útil.
+					</div>
+				<?php elseif ( 'erro' === $rmf_status ) : ?>
+					<div class="rmf-form-notice rmf-form-notice--error" role="alert">
+						⚠️ <strong>Ops!</strong> Ocorreu um erro. Tente novamente ou fale pelo WhatsApp.
+					</div>
+				<?php endif; ?>
 				<form class="rmf-contact-form" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post" novalidate>
 					<?php wp_nonce_field( 'rmf_contact_nonce', 'rmf_nonce' ); ?>
 					<input type="hidden" name="action" value="rmf_submit_contact">

@@ -1307,6 +1307,24 @@ a.btn:hover::after {
         border: 1px solid rgba(32, 93, 138, 0.08);
 }
 
+.rmf-form-notice {
+        padding: .9rem 1.2rem;
+        border-radius: 6px;
+        margin-bottom: 1.4rem;
+        font-size: .95rem;
+        line-height: 1.5;
+}
+.rmf-form-notice--success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+}
+.rmf-form-notice--error {
+        background: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffc107;
+}
+
 .rmf-contact-form .form-row {
         display: flex;
         flex-direction: column;
