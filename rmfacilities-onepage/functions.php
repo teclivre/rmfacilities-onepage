@@ -628,27 +628,48 @@ function rmf_handle_contact_form_submission() {
 		exit;
 	}
 
-	$to      = get_theme_mod( 'rmf_company_email', get_option( 'admin_email' ) );
-	$subject = 'Novo lead do site RM Facilities LTDA';
-	$message = "Nome: {$fields['nome']}\n";
-	$message .= "Empresa: {$fields['empresa']}\n";
-	$message .= "E-mail: {$fields['email']}\n";
-	$message .= "Telefone: {$fields['telefone']}\n";
-	$message .= "Servico: {$fields['servico']}\n";
-	$message .= "Metragem: {$fields['metragem']}\n";
-	$message .= "Cidade: {$fields['cidade']}\n";
-	$message .= "Urgencia: {$fields['urgencia']}\n";
-	$message .= "Mensagem: {$fields['mensagem']}\n";
+	// Destinatário fixo — garante entrega mesmo se theme_mod estiver vazio
+	$to      = 'contato@rmfacilities.com.br';
+	$subject = '[Site] Novo contato: ' . $fields['nome'] . ' — ' . $fields['servico'];
 
-	$headers = array( 'Reply-To: ' . $fields['nome'] . ' <' . $fields['email'] . '>' );
+	$headers = array(
+		'Content-Type: text/html; charset=UTF-8',
+		'Reply-To: ' . $fields['nome'] . ' <' . $fields['email'] . '>',
+	);
+
+	$message  = '<html><body style="font-family:Arial,sans-serif;font-size:15px;color:#222">';
+	$message .= '<h2 style="color:#1a4b7a">📋 Novo lead — RM Facilities</h2>';
+	$message .= '<table cellpadding="6" cellspacing="0" style="border-collapse:collapse;width:100%;max-width:520px">';
+	foreach ( array(
+		'Nome'     => $fields['nome'],
+		'Empresa'  => $fields['empresa'],
+		'E-mail'   => $fields['email'],
+		'Telefone' => $fields['telefone'],
+		'Serviço'  => $fields['servico'],
+		'Metragem' => $fields['metragem'],
+		'Cidade'   => $fields['cidade'],
+		'Urgência' => $fields['urgencia'],
+		'Mensagem' => nl2br( esc_html( $fields['mensagem'] ) ),
+	) as $label => $value ) {
+		if ( empty( $value ) ) continue;
+		$message .= '<tr><td style="background:#f0f4f8;font-weight:bold;padding:6px 10px;border:1px solid #ddd;width:110px">' . esc_html( $label ) . '</td>';
+		$message .= '<td style="padding:6px 10px;border:1px solid #ddd">' . $value . '</td></tr>';
+	}
+	$message .= '</table></body></html>';
 
 	$sent = wp_mail( $to, $subject, $message, $headers );
 
-	// Envia cópia de confirmação para o lead
-	if ( $sent && ! empty( $fields['email'] ) ) {
-		$confirm_subject = 'Recebemos seu contato — RM Facilities';
-		$confirm_message = "Olá, {$fields['nome']}!\n\nRecebemos sua solicitação e entraremos em contato em até 1 dia útil.\n\nServiço de interesse: {$fields['servico']}\n\nAtenciosamente,\nEquipe RM Facilities\ncontato@rmfacilities.com.br | (12) 3042-1799";
-		wp_mail( $fields['email'], $confirm_subject, $confirm_message );
+	// Confirmação para o lead
+	if ( ! empty( $fields['email'] ) ) {
+		$confirm_headers  = array( 'Content-Type: text/html; charset=UTF-8' );
+		$confirm_subject  = 'Recebemos seu contato — RM Facilities';
+		$confirm_message  = '<html><body style="font-family:Arial,sans-serif;font-size:15px;color:#222">';
+		$confirm_message .= '<h2 style="color:#1a4b7a">Olá, ' . esc_html( $fields['nome'] ) . '!</h2>';
+		$confirm_message .= '<p>Recebemos sua solicitação sobre <strong>' . esc_html( $fields['servico'] ) . '</strong> e entraremos em contato em até <strong>1 dia útil</strong>.</p>';
+		$confirm_message .= '<p>Caso prefira agilizar, fale diretamente pelo WhatsApp: <a href="https://wa.me/5512930421799">(12) 93042-1799</a></p>';
+		$confirm_message .= '<p style="color:#666;font-size:13px">Atenciosamente,<br><strong>Equipe RM Facilities</strong><br>contato@rmfacilities.com.br | (12) 3042-1799</p>';
+		$confirm_message .= '</body></html>';
+		wp_mail( $fields['email'], $confirm_subject, $confirm_message, $confirm_headers );
 	}
 
 	$thanks_url = home_url( '/obrigado/' );
