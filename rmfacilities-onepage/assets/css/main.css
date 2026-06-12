@@ -1544,3 +1544,26 @@ a.btn:hover::after {
 	background: #081220;
 	border-top: 1px solid #203448;
 }
+
+/* ── Página Obrigado ──────────────────────────────────────── */
+.obrigado-page { min-height: 70vh; display: flex; align-items: center; }
+.obrigado-hero { width: 100%; padding: 4rem 0; }
+.obrigado-card {
+    max-width: 640px; margin: 0 auto; text-align: center;
+    background: #0e1a2a; border: 1px solid rgba(255,255,255,.08);
+    border-radius: 12px; padding: 3rem 2.5rem;
+}
+.obrigado-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+.obrigado-card h1 { font-size: 2rem; margin-bottom: .75rem; }
+.obrigado-lead { font-size: 1.05rem; color: #8aabb8; margin-bottom: 1.8rem; }
+.obrigado-proximos { list-style: none; padding: 0; margin: 0 0 2rem; text-align: left; display: inline-block; }
+.obrigado-proximos li { padding: .45rem 0; font-size: .97rem; }
+.obrigado-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1.5rem; }
+.btn-whatsapp { background: #25d366; color: #fff !important; border-color: #25d366; }
+.btn-whatsapp:hover { background: #1ebe5d; border-color: #1ebe5d; }
+.obrigado-contato-direto { font-size: .88rem; color: #8aabb8; }
+.obrigado-contato-direto a { color: #4d83b3; }
+@media (max-width: 480px) {
+    .obrigado-card { padding: 2rem 1.2rem; }
+    .obrigado-actions { flex-direction: column; }
+}

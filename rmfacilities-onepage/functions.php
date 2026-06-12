@@ -651,8 +651,7 @@ function rmf_handle_contact_form_submission() {
 		wp_mail( $fields['email'], $confirm_subject, $confirm_message );
 	}
 
-	$thanks_page_id = (int) get_option( 'rmf_thanks_page_id' );
-	$thanks_url     = $thanks_page_id > 0 ? get_permalink( $thanks_page_id ) : home_url( '/#contato?status=enviado' );
+	$thanks_url = home_url( '/obrigado/' );
 
 	wp_safe_redirect( $thanks_url );
 	exit;
