@@ -1,4 +1,6 @@
 (function () {
+	document.documentElement.classList.add('has-js');
+
 	const header = document.querySelector('.site-header');
 	const toggle = document.querySelector('.menu-toggle');
 	const nav = document.querySelector('.main-navigation');
@@ -7,6 +9,32 @@
 		toggle.addEventListener('click', function () {
 			const isOpen = nav.classList.toggle('is-open');
 			toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+			toggle.setAttribute('aria-label', isOpen ? 'Fechar menu' : 'Abrir menu');
+		});
+
+		document.addEventListener('keydown', function (event) {
+			if (event.key === 'Escape' && nav.classList.contains('is-open')) {
+				nav.classList.remove('is-open');
+				toggle.setAttribute('aria-expanded', 'false');
+				toggle.setAttribute('aria-label', 'Abrir menu');
+				toggle.focus();
+			}
+		});
+
+		document.addEventListener('click', function (event) {
+			if (header && !header.contains(event.target) && nav.classList.contains('is-open')) {
+				nav.classList.remove('is-open');
+				toggle.setAttribute('aria-expanded', 'false');
+				toggle.setAttribute('aria-label', 'Abrir menu');
+			}
+		});
+
+		nav.addEventListener('click', function (event) {
+			if (event.target.closest('a')) {
+				nav.classList.remove('is-open');
+				toggle.setAttribute('aria-expanded', 'false');
+				toggle.setAttribute('aria-label', 'Abrir menu');
+			}
 		});
 	}
 
@@ -19,12 +47,12 @@
 				return;
 			}
 
-			const hashIndex = href.indexOf('#');
-			if (hashIndex === -1) {
+			const destination = new URL(href, window.location.href);
+			if (!destination.hash || destination.origin !== window.location.origin || destination.pathname !== window.location.pathname) {
 				return;
 			}
 
-			const targetId = href.slice(hashIndex + 1);
+			const targetId = decodeURIComponent(destination.hash.slice(1));
 			if (!targetId) {
 				return;
 			}
@@ -41,7 +69,7 @@
 
 			window.scrollTo({
 				top: y,
-				behavior: 'smooth'
+				behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
 			});
 
 			if (nav) {
@@ -53,7 +81,7 @@
 		});
 	});
 
-	const sectionIds = ['inicio', 'sobre', 'resultados', 'porque', 'servicos', 'contato', 'faq', 'depoimentos', 'blog'];
+	const sectionIds = ['inicio', 'sobre', 'como-trabalhamos', 'porque', 'servicos', 'contato', 'faq', 'blog'];
 	const sections = sectionIds
 		.map(function (id) {
 			return document.getElementById(id);
@@ -80,6 +108,11 @@
 			const hashIndex = href.indexOf('#');
 			const id = hashIndex > -1 ? href.slice(hashIndex + 1) : '';
 			menuLink.classList.toggle('is-active', id === currentId);
+			if (id === currentId) {
+				menuLink.setAttribute('aria-current', 'location');
+			} else {
+				menuLink.removeAttribute('aria-current');
+			}
 		});
 	}
 
@@ -88,21 +121,27 @@
 		rootMargin: '0px 0px -50px 0px'
 	};
 
-	const observer = new IntersectionObserver(function (entries) {
-		entries.forEach(function (entry) {
-			if (entry.isIntersecting) {
-				entry.target.classList.add('in-viewport');
-				observer.unobserve(entry.target);
+	const animatableElements = document.querySelectorAll('.card, .post-card, .section h2, .section h3, .btn, .highlight-box, .trust-item, .logo-wall span, .testimonial-card, .why-item, .faq-item');
+	if ('IntersectionObserver' in window) {
+		const observer = new IntersectionObserver(function (entries) {
+			entries.forEach(function (entry) {
+				if (entry.isIntersecting) {
+					entry.target.classList.add('in-viewport');
+					observer.unobserve(entry.target);
+				}
+			});
+		}, observerOptions);
+
+		animatableElements.forEach(function (element) {
+			if (!element.classList.contains('in-viewport')) {
+				observer.observe(element);
 			}
 		});
-	}, observerOptions);
-
-	const animatableElements = document.querySelectorAll('.card, .post-card, .section h2, .section h3, .btn, .highlight-box, .trust-item, .logo-wall span, .testimonial-card, .why-item, .faq-item');
-	animatableElements.forEach(function (element) {
-		if (!element.classList.contains('in-viewport')) {
-			observer.observe(element);
-		}
-	});
+	} else {
+		animatableElements.forEach(function (element) {
+			element.classList.add('in-viewport');
+		});
+	}
 
 	const heroSection = document.querySelector('.hero');
 	if (heroSection) {
@@ -123,25 +162,29 @@
 		setActiveMenuLink();
 	});
 
-	if (heroSection) {
-		window.addEventListener('scroll', function () {
-			const scrolled = window.scrollY;
-			heroSection.style.backgroundPosition = '0 ' + (scrolled * 0.25) + 'px';
-		});
-	}
-
 	setActiveMenuLink();
 
 	// Accordion FAQ
-	document.querySelectorAll('.faq-question').forEach(function (question) {
-		question.addEventListener('click', function () {
-			const item = this.closest('.faq-item');
+	document.querySelectorAll('.faq-question').forEach(function (button) {
+		button.addEventListener('click', function () {
+			const item = button.closest('.faq-item');
 			const isOpen = item.classList.contains('open');
 			document.querySelectorAll('.faq-item.open').forEach(function (openItem) {
 				openItem.classList.remove('open');
+				const openButton = openItem.querySelector('.faq-question');
+				const answer = openItem.querySelector('.faq-answer');
+				if (openButton && answer) {
+					openButton.setAttribute('aria-expanded', 'false');
+					answer.hidden = true;
+				}
 			});
 			if (!isOpen) {
 				item.classList.add('open');
+				button.setAttribute('aria-expanded', 'true');
+				const answer = document.getElementById(button.getAttribute('aria-controls'));
+				if (answer) {
+					answer.hidden = false;
+				}
 			}
 		});
 	});

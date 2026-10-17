@@ -8,13 +8,18 @@
 get_header();
 
 $rmf_wpp_url = function_exists( 'rmf_get_whatsapp_url' ) ? rmf_get_whatsapp_url() : '#contato';
+$rmf_service_links = array();
+foreach ( array_keys( rmf_service_pages() ) as $rmf_service_slug ) {
+	$rmf_service_page                  = get_page_by_path( $rmf_service_slug );
+	$rmf_service_links[ $rmf_service_slug ] = $rmf_service_page ? get_permalink( $rmf_service_page ) : '#contato';
+}
 ?>
 
 <section class="hero section" id="inicio">
 	<div class="container">
-		<p class="kicker" data-hero-reveal="1"><?php esc_html_e( 'Terceirizacao de servicos profissionais', 'rmfacilities-onepage' ); ?></p>
-		<h1 data-hero-reveal="2"><?php esc_html_e( 'Portaria, Limpeza, Jardinagem e Recepcao em Sao Jose dos Campos', 'rmfacilities-onepage' ); ?></h1>
-		<p data-hero-reveal="3"><?php esc_html_e( 'Todos os nossos servicos sao prestados por profissionais capacitados, com rigoroso processo de selecao e treinamento continuo.', 'rmfacilities-onepage' ); ?></p>
+		<p class="kicker" data-hero-reveal="1"><?php esc_html_e( 'Terceirização de serviços profissionais', 'rmfacilities-onepage' ); ?></p>
+		<h1 data-hero-reveal="2"><?php esc_html_e( 'Portaria, limpeza, jardinagem e recepção em São José dos Campos', 'rmfacilities-onepage' ); ?></h1>
+		<p data-hero-reveal="3"><?php esc_html_e( 'Conheça soluções de facilities para empresas e condomínios, com escopo definido conforme as necessidades de cada operação.', 'rmfacilities-onepage' ); ?></p>
 		<div class="hero-actions" data-hero-reveal="4">
 			<a class="btn btn-primary" href="#contato"><?php esc_html_e( 'Solicitar orcamento', 'rmfacilities-onepage' ); ?></a>
 			<a class="btn btn-outline" href="<?php echo esc_url( $rmf_wpp_url ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Falar no WhatsApp', 'rmfacilities-onepage' ); ?></a>
@@ -27,49 +32,42 @@ $rmf_wpp_url = function_exists( 'rmf_get_whatsapp_url' ) ? rmf_get_whatsapp_url(
 		<div>
 			<p class="kicker"><?php esc_html_e( 'Quem somos', 'rmfacilities-onepage' ); ?></p>
 			<h2><?php esc_html_e( 'RM Facilities LTDA', 'rmfacilities-onepage' ); ?></h2>
-			<p><?php esc_html_e( 'Com mais de 6 anos de experiencia em terceirizacao de servicos de portaria, limpeza, jardinagem e recepcao em Sao Jose dos Campos, Regiao Bragantina e Sul de Minas, a RM Facilities LTDA ajuda empresas, condominios e instituicoes a reduzir custos operacionais, elevar a produtividade e garantir conformidade trabalhista com seguranca.', 'rmfacilities-onepage' ); ?></p>
+			<p><?php esc_html_e( 'A RM Facilities LTDA oferece terceirização de serviços de portaria, limpeza, jardinagem e recepção para empresas, condomínios e instituições em São José dos Campos, Vale do Paraíba, Região Bragantina e Sul de Minas. O escopo é definido de acordo com as necessidades de cada operação.', 'rmfacilities-onepage' ); ?></p>
 		</div>
 		<div class="highlight-box">
 			<h3><?php esc_html_e( 'Por que terceirizar com a RM Facilities LTDA', 'rmfacilities-onepage' ); ?></h3>
 			<ul>
-				<li><?php esc_html_e( 'Selecao e treinamento continuo dos colaboradores', 'rmfacilities-onepage' ); ?></li>
-				<li><?php esc_html_e( 'Supervisao presencial e indicadores de qualidade', 'rmfacilities-onepage' ); ?></li>
-				<li><?php esc_html_e( 'Plano de contingencia e cobertura garantida', 'rmfacilities-onepage' ); ?></li>
-				<li><?php esc_html_e( 'Conformidade trabalhista e sem passivo juridico', 'rmfacilities-onepage' ); ?></li>
-				<li><?php esc_html_e( 'Gestor de conta dedicado ao seu negocio', 'rmfacilities-onepage' ); ?></li>
+				<li><?php esc_html_e( 'Equipe orientada para as rotinas do serviço contratado', 'rmfacilities-onepage' ); ?></li>
+				<li><?php esc_html_e( 'Acompanhamento definido conforme o escopo contratado', 'rmfacilities-onepage' ); ?></li>
+				<li><?php esc_html_e( 'Planejamento de cobertura operacional', 'rmfacilities-onepage' ); ?></li>
+				<li><?php esc_html_e( 'Gestão das obrigações trabalhistas do vínculo empregatício', 'rmfacilities-onepage' ); ?></li>
+				<li><?php esc_html_e( 'Comunicação alinhada às necessidades da operação', 'rmfacilities-onepage' ); ?></li>
 			</ul>
 		</div>
 	</div>
 </section>
 
-<section class="section trust-strip" id="resultados">
+<section class="section trust-strip" id="como-trabalhamos">
 	<div class="container">
-		<p class="kicker"><?php esc_html_e( 'Resultados e confianca', 'rmfacilities-onepage' ); ?></p>
-		<div class="trust-grid">
-			<article class="trust-item">
-				<strong>80</strong>
-				<span><?php esc_html_e( 'postos de trabalho ativos', 'rmfacilities-onepage' ); ?></span>
+		<p class="kicker"><?php esc_html_e( 'Do primeiro contato ao início do serviço', 'rmfacilities-onepage' ); ?></p>
+		<h2><?php esc_html_e( 'Um processo claro para entender sua operação', 'rmfacilities-onepage' ); ?></h2>
+		<div class="cards cards-4">
+			<article class="card">
+				<h3><?php esc_html_e( '1. Levantamento', 'rmfacilities-onepage' ); ?></h3>
+				<p><?php esc_html_e( 'Entendemos o ambiente, as rotinas, os horários e o serviço que sua empresa precisa.', 'rmfacilities-onepage' ); ?></p>
 			</article>
-			<article class="trust-item">
-				<strong>98%</strong>
-				<span><?php esc_html_e( 'indice medio de satisfacao', 'rmfacilities-onepage' ); ?></span>
+			<article class="card">
+				<h3><?php esc_html_e( '2. Proposta', 'rmfacilities-onepage' ); ?></h3>
+				<p><?php esc_html_e( 'Definimos o escopo do atendimento e preparamos uma proposta para sua avaliação.', 'rmfacilities-onepage' ); ?></p>
 			</article>
-			<article class="trust-item">
-				<strong>24/7</strong>
-				<span><?php esc_html_e( 'suporte operacional e supervisao', 'rmfacilities-onepage' ); ?></span>
+			<article class="card">
+				<h3><?php esc_html_e( '3. Planejamento', 'rmfacilities-onepage' ); ?></h3>
+				<p><?php esc_html_e( 'Com a proposta aprovada, alinhamos os detalhes necessários para iniciar a operação.', 'rmfacilities-onepage' ); ?></p>
 			</article>
-			<article class="trust-item">
-				<strong>6+</strong>
-				<span><?php esc_html_e( 'anos de atuacao em facilities', 'rmfacilities-onepage' ); ?></span>
+			<article class="card">
+				<h3><?php esc_html_e( '4. Acompanhamento', 'rmfacilities-onepage' ); ?></h3>
+				<p><?php esc_html_e( 'Acompanhamos o serviço conforme as rotinas e os critérios definidos com sua empresa.', 'rmfacilities-onepage' ); ?></p>
 			</article>
-		</div>
-
-		<div class="logo-wall" aria-label="<?php esc_attr_e( 'Empresas atendidas', 'rmfacilities-onepage' ); ?>">
-			<span><?php esc_html_e( 'Condominios', 'rmfacilities-onepage' ); ?></span>
-			<span><?php esc_html_e( 'Centros Empresariais', 'rmfacilities-onepage' ); ?></span>
-			<span><?php esc_html_e( 'Instituicoes de Ensino', 'rmfacilities-onepage' ); ?></span>
-			<span><?php esc_html_e( 'Clinicas e Hospitais', 'rmfacilities-onepage' ); ?></span>
-			<span><?php esc_html_e( 'Industria', 'rmfacilities-onepage' ); ?></span>
 		</div>
 	</div>
 </section>
@@ -77,12 +75,12 @@ $rmf_wpp_url = function_exists( 'rmf_get_whatsapp_url' ) ? rmf_get_whatsapp_url(
 <section class="section" id="porque">
 	<div class="container">
 		<p class="kicker"><?php esc_html_e( 'Por que a RM Facilities LTDA', 'rmfacilities-onepage' ); ?></p>
-		<h2><?php esc_html_e( 'Terceirizacao com responsabilidade, supervisao e resultado', 'rmfacilities-onepage' ); ?></h2>
+		<h2><?php esc_html_e( 'Terceirização com responsabilidade e acompanhamento', 'rmfacilities-onepage' ); ?></h2>
 		<div class="why-grid">
 			<article class="why-item">
 				<span class="why-icon" aria-hidden="true">🎓</span>
-				<h3><?php esc_html_e( 'Equipe treinada e certificada', 'rmfacilities-onepage' ); ?></h3>
-				<p><?php esc_html_e( 'Todos os colaboradores passam por processo seletivo rigoroso, treinamento especifico por funcao e reciclagens periodicas.', 'rmfacilities-onepage' ); ?></p>
+				<h3><?php esc_html_e( 'Equipe orientada para cada função', 'rmfacilities-onepage' ); ?></h3>
+				<p><?php esc_html_e( 'As rotinas e responsabilidades são alinhadas conforme a função e o ambiente de trabalho.', 'rmfacilities-onepage' ); ?></p>
 			</article>
 			<article class="why-item">
 				<span class="why-icon" aria-hidden="true">📊</span>
@@ -91,23 +89,23 @@ $rmf_wpp_url = function_exists( 'rmf_get_whatsapp_url' ) ? rmf_get_whatsapp_url(
 			</article>
 			<article class="why-item">
 				<span class="why-icon" aria-hidden="true">⚖️</span>
-				<h3><?php esc_html_e( 'Conformidade trabalhista total', 'rmfacilities-onepage' ); ?></h3>
-				<p><?php esc_html_e( 'Eliminamos seu passivo juridico: gestao completa de folha, ferias, encargos e obrigacoes acessorias.', 'rmfacilities-onepage' ); ?></p>
+				<h3><?php esc_html_e( 'Gestão das obrigações trabalhistas', 'rmfacilities-onepage' ); ?></h3>
+				<p><?php esc_html_e( 'A administração das obrigações relacionadas aos colaboradores é realizada pela empresa empregadora, conforme a legislação e o contrato.', 'rmfacilities-onepage' ); ?></p>
 			</article>
 			<article class="why-item">
 				<span class="why-icon" aria-hidden="true">🛡️</span>
 				<h3><?php esc_html_e( 'Plano de contingencia e cobertura', 'rmfacilities-onepage' ); ?></h3>
-				<p><?php esc_html_e( 'Mantemos banco de reservas treinados para garantir cobertura imediata em faltas ou imprevistos.', 'rmfacilities-onepage' ); ?></p>
+				<p><?php esc_html_e( 'O planejamento para ausências e imprevistos é definido conforme o serviço e as condições contratadas.', 'rmfacilities-onepage' ); ?></p>
 			</article>
 			<article class="why-item">
 				<span class="why-icon" aria-hidden="true">🤝</span>
-				<h3><?php esc_html_e( 'Gestor de conta dedicado', 'rmfacilities-onepage' ); ?></h3>
-				<p><?php esc_html_e( 'Voce tem um ponto de contato unico para demandas operacionais, garantindo agilidade e atendimento personalizado.', 'rmfacilities-onepage' ); ?></p>
+				<h3><?php esc_html_e( 'Comunicação com a equipe', 'rmfacilities-onepage' ); ?></h3>
+				<p><?php esc_html_e( 'Alinhamos os canais de comunicação e o acompanhamento operacional conforme as necessidades do contrato.', 'rmfacilities-onepage' ); ?></p>
 			</article>
 			<article class="why-item">
 				<span class="why-icon" aria-hidden="true">📍</span>
 				<h3><?php esc_html_e( 'Atuacao regional com base em SJC', 'rmfacilities-onepage' ); ?></h3>
-				<p><?php esc_html_e( 'Com sede em Sao Jose dos Campos, atendemos com agilidade empresas, condominios e instituicoes no Vale do Paraiba, Regiao Bragantina e Sul de Minas.', 'rmfacilities-onepage' ); ?></p>
+				<p><?php esc_html_e( 'Com sede em São José dos Campos, atendemos empresas, condomínios e instituições no Vale do Paraíba, Região Bragantina e Sul de Minas. Consulte a disponibilidade para sua cidade.', 'rmfacilities-onepage' ); ?></p>
 			</article>
 		</div>
 	</div>
@@ -120,23 +118,27 @@ $rmf_wpp_url = function_exists( 'rmf_get_whatsapp_url' ) ? rmf_get_whatsapp_url(
 		<div class="cards cards-4">
 			<article class="card">
 				<span class="card-icon">🏢</span>
-				<h3><?php esc_html_e( 'Portaria', 'rmfacilities-onepage' ); ?></h3>
-				<p><?php esc_html_e( 'Controle de acesso e seguranca patrimonial com profissionais treinados e postura adequada para representar sua empresa.', 'rmfacilities-onepage' ); ?></p>
+				<h3><a href="<?php echo esc_url( $rmf_service_links['portaria-sao-jose-dos-campos'] ); ?>"><?php esc_html_e( 'Portaria em São José dos Campos', 'rmfacilities-onepage' ); ?></a></h3>
+				<p><?php esc_html_e( 'Controle de acesso e rotinas de portaria definidas conforme as necessidades da sua empresa.', 'rmfacilities-onepage' ); ?></p>
+				<a class="text-link" href="<?php echo esc_url( $rmf_service_links['portaria-sao-jose-dos-campos'] ); ?>"><?php esc_html_e( 'Conheça o serviço de portaria', 'rmfacilities-onepage' ); ?></a>
 			</article>
 			<article class="card">
 				<span class="card-icon">🧹</span>
-				<h3><?php esc_html_e( 'Limpeza', 'rmfacilities-onepage' ); ?></h3>
-				<p><?php esc_html_e( 'Rotinas de limpeza profissional com controle de qualidade e equipes preparadas para diferentes tipos de ambiente.', 'rmfacilities-onepage' ); ?></p>
+				<h3><a href="<?php echo esc_url( $rmf_service_links['limpeza-sao-jose-dos-campos'] ); ?>"><?php esc_html_e( 'Limpeza em São José dos Campos', 'rmfacilities-onepage' ); ?></a></h3>
+				<p><?php esc_html_e( 'Rotinas de limpeza e conservação planejadas conforme o tipo e o fluxo do ambiente.', 'rmfacilities-onepage' ); ?></p>
+				<a class="text-link" href="<?php echo esc_url( $rmf_service_links['limpeza-sao-jose-dos-campos'] ); ?>"><?php esc_html_e( 'Conheça o serviço de limpeza', 'rmfacilities-onepage' ); ?></a>
 			</article>
 			<article class="card">
 				<span class="card-icon">🌿</span>
-				<h3><?php esc_html_e( 'Jardinagem', 'rmfacilities-onepage' ); ?></h3>
+				<h3><a href="<?php echo esc_url( $rmf_service_links['jardinagem-sao-jose-dos-campos'] ); ?>"><?php esc_html_e( 'Jardinagem em São José dos Campos', 'rmfacilities-onepage' ); ?></a></h3>
 				<p><?php esc_html_e( 'Manutencao e cuidado de areas verdes internas e externas, valorizando o ambiente da sua empresa.', 'rmfacilities-onepage' ); ?></p>
+				<a class="text-link" href="<?php echo esc_url( $rmf_service_links['jardinagem-sao-jose-dos-campos'] ); ?>"><?php esc_html_e( 'Conheça o serviço de jardinagem', 'rmfacilities-onepage' ); ?></a>
 			</article>
 			<article class="card">
 				<span class="card-icon">🤝</span>
-				<h3><?php esc_html_e( 'Recepcao', 'rmfacilities-onepage' ); ?></h3>
-				<p><?php esc_html_e( 'Atendimento receptivo e profissional para clientes e visitantes, transmitindo a imagem da sua empresa desde a entrada.', 'rmfacilities-onepage' ); ?></p>
+				<h3><a href="<?php echo esc_url( $rmf_service_links['recepcao-sao-jose-dos-campos'] ); ?>"><?php esc_html_e( 'Recepção em São José dos Campos', 'rmfacilities-onepage' ); ?></a></h3>
+				<p><?php esc_html_e( 'Recepção e orientação de visitantes de acordo com os processos da sua empresa.', 'rmfacilities-onepage' ); ?></p>
+				<a class="text-link" href="<?php echo esc_url( $rmf_service_links['recepcao-sao-jose-dos-campos'] ); ?>"><?php esc_html_e( 'Conheça o serviço de recepção', 'rmfacilities-onepage' ); ?></a>
 			</article>
 		</div>
 	</div>
@@ -148,7 +150,7 @@ $rmf_wpp_url = function_exists( 'rmf_get_whatsapp_url' ) ? rmf_get_whatsapp_url(
 			<div class="contact-info">
 				<p class="kicker"><?php esc_html_e( 'Fale conosco', 'rmfacilities-onepage' ); ?></p>
 				<h2><?php esc_html_e( 'Solicite um orcamento sem compromisso', 'rmfacilities-onepage' ); ?></h2>
-				<p><?php esc_html_e( 'Preencha o formulario ou use um de nossos canais diretos. Retornamos em ate 1 dia util.', 'rmfacilities-onepage' ); ?></p>
+				<p><?php esc_html_e( 'Preencha o formulário ou use um de nossos canais diretos para solicitar uma proposta.', 'rmfacilities-onepage' ); ?></p>
 				<ul class="contact-list">
 					<li>
 						<span class="contact-icon" aria-hidden="true">📞</span>
@@ -173,15 +175,15 @@ $rmf_wpp_url = function_exists( 'rmf_get_whatsapp_url' ) ? rmf_get_whatsapp_url(
 				<?php
 				$rmf_status = isset( $_GET['status'] ) ? sanitize_key( $_GET['status'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification
 				if ( 'enviado' === $rmf_status ) : ?>
-					<div class="rmf-form-notice rmf-form-notice--success" role="alert">
-						✅ <strong>Mensagem enviada!</strong> Retornaremos em até 1 dia útil.
+					<div class="rmf-form-notice rmf-form-notice--success" role="status">
+						✅ <strong>Mensagem enviada!</strong> Sua solicitação foi recebida.
 					</div>
 				<?php elseif ( 'erro' === $rmf_status ) : ?>
 					<div class="rmf-form-notice rmf-form-notice--error" role="alert">
 						⚠️ <strong>Ops!</strong> Ocorreu um erro. Tente novamente ou fale pelo WhatsApp.
 					</div>
 				<?php endif; ?>
-				<form class="rmf-contact-form" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post" novalidate>
+				<form class="rmf-contact-form" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post">
 					<?php wp_nonce_field( 'rmf_contact_nonce', 'rmf_nonce' ); ?>
 					<input type="hidden" name="action" value="rmf_submit_contact">
 
@@ -256,76 +258,34 @@ $rmf_wpp_url = function_exists( 'rmf_get_whatsapp_url' ) ? rmf_get_whatsapp_url(
 	</div>
 </section>
 
-<section class="section section-alt" id="depoimentos">
-	<div class="container">
-		<p class="kicker"><?php esc_html_e( 'Depoimentos', 'rmfacilities-onepage' ); ?></p>
-		<h2><?php esc_html_e( 'O que nossos clientes dizem', 'rmfacilities-onepage' ); ?></h2>
-
-		<div class="testimonial-grid">
-			<article class="testimonial-card">
-				<div class="testimonial-head">
-					<span class="testimonial-avatar" aria-hidden="true">AC</span>
-					<div>
-						<h3><?php esc_html_e( 'Ana Carvalho', 'rmfacilities-onepage' ); ?></h3>
-						<p class="testimonial-role"><?php esc_html_e( 'SindicA profissional, condominio empresarial', 'rmfacilities-onepage' ); ?></p>
-					</div>
-				</div>
-				<p><?php esc_html_e( 'A equipe da RM Facilities LTDA elevou o padrao de atendimento da nossa portaria e trouxe mais seguranca para moradores e visitantes.', 'rmfacilities-onepage' ); ?></p>
-			</article>
-
-			<article class="testimonial-card">
-				<div class="testimonial-head">
-					<span class="testimonial-avatar" aria-hidden="true">RF</span>
-					<div>
-						<h3><?php esc_html_e( 'Rafael Freitas', 'rmfacilities-onepage' ); ?></h3>
-						<p class="testimonial-role"><?php esc_html_e( 'Gerente administrativo, centro logistico', 'rmfacilities-onepage' ); ?></p>
-					</div>
-				</div>
-				<p><?php esc_html_e( 'Conseguimos padronizar limpeza e recepcao com indicadores claros. O acompanhamento operacional e muito proximo.', 'rmfacilities-onepage' ); ?></p>
-			</article>
-
-			<article class="testimonial-card">
-				<div class="testimonial-head">
-					<span class="testimonial-avatar" aria-hidden="true">ML</span>
-					<div>
-						<h3><?php esc_html_e( 'Mariana Lopes', 'rmfacilities-onepage' ); ?></h3>
-						<p class="testimonial-role"><?php esc_html_e( 'Diretora operacional, instituicao de ensino', 'rmfacilities-onepage' ); ?></p>
-					</div>
-				</div>
-				<p><?php esc_html_e( 'A terceirizacao com a RM Facilities LTDA trouxe mais previsibilidade e qualidade no dia a dia da operacao.', 'rmfacilities-onepage' ); ?></p>
-			</article>
-		</div>
-	</div>
-</section>
-
 <section class="section" id="faq">
 	<div class="container">
 		<p class="kicker"><?php esc_html_e( 'Duvidas frequentes', 'rmfacilities-onepage' ); ?></p>
 		<h2><?php esc_html_e( 'Perguntas frequentes sobre terceirizacao de facilities', 'rmfacilities-onepage' ); ?></h2>
 		<dl class="faq-list">
 			<div class="faq-item">
-				<dt class="faq-question"><?php esc_html_e( 'Quais servicos a RM Facilities LTDA oferece?', 'rmfacilities-onepage' ); ?></dt>
-				<dd class="faq-answer"><?php esc_html_e( 'Oferecemos portaria e controle de acesso, limpeza e conservacao, jardinagem e areas verdes, e recepcao profissional. Podemos combinar servicos em um pacote personalizado para sua empresa.', 'rmfacilities-onepage' ); ?></dd>
+				<dt><button class="faq-question" type="button" aria-expanded="false" aria-controls="faq-answer-1"><?php esc_html_e( 'Quais serviços a RM Facilities LTDA oferece?', 'rmfacilities-onepage' ); ?></button></dt>
+				<dd class="faq-answer" id="faq-answer-1" hidden><?php esc_html_e( 'Oferecemos portaria e controle de acesso, limpeza e conservação, jardinagem e áreas verdes, e recepção profissional. Podemos combinar serviços em um pacote personalizado para sua empresa.', 'rmfacilities-onepage' ); ?></dd>
 			</div>
 			<div class="faq-item">
-				<dt class="faq-question"><?php esc_html_e( 'Em quais cidades voces atendem?', 'rmfacilities-onepage' ); ?></dt>
-				<dd class="faq-answer"><?php esc_html_e( 'Temos sede em Sao Jose dos Campos – SP e atendemos empresas e condominios no Vale do Paraiba, Regiao Bragantina e Sul de Minas. Consulte-nos para verificar disponibilidade na sua cidade.', 'rmfacilities-onepage' ); ?></dd>
+				<dt><button class="faq-question" type="button" aria-expanded="false" aria-controls="faq-answer-2"><?php esc_html_e( 'Em quais cidades vocês atendem?', 'rmfacilities-onepage' ); ?></button></dt>
+				<dd class="faq-answer" id="faq-answer-2" hidden><?php esc_html_e( 'Temos sede em São José dos Campos – SP e atendemos empresas e condomínios no Vale do Paraíba, Região Bragantina e Sul de Minas. Consulte-nos para verificar disponibilidade na sua cidade.', 'rmfacilities-onepage' ); ?></dd>
 			</div>
 			<div class="faq-item">
-				<dt class="faq-question"><?php esc_html_e( 'Como funciona o processo de contratacao?', 'rmfacilities-onepage' ); ?></dt>
-				<dd class="faq-answer"><?php esc_html_e( 'Apos o contato inicial, realizamos um levantamento das suas necessidades, elaboramos uma proposta personalizada e, apos aprovacao, iniciamos o processo de selecao e alocacao dos profissionais. O prazo medio do primeiro ao inicio e de 7 a 15 dias uteis.', 'rmfacilities-onepage' ); ?></dd>
+				<dt><button class="faq-question" type="button" aria-expanded="false" aria-controls="faq-answer-3"><?php esc_html_e( 'Como funciona o processo de contratação?', 'rmfacilities-onepage' ); ?></button></dt>
+				<dd class="faq-answer" id="faq-answer-3" hidden><?php esc_html_e( 'Após o contato inicial, realizamos um levantamento das suas necessidades, elaboramos uma proposta personalizada e, após aprovação, alinhamos os detalhes para iniciar o serviço.', 'rmfacilities-onepage' ); ?></dd>
 			</div>
 			<div class="faq-item">
-				<dt class="faq-question"><?php esc_html_e( 'A empresa assume as obrigacoes trabalhistas dos colaboradores?', 'rmfacilities-onepage' ); ?></dt>
-				<dd class="faq-answer"><?php esc_html_e( 'Sim. A RM Facilities LTDA e empregadora de todos os colaboradores alocados. Gerenciamos admissao, folha de pagamento, ferias, 13o salario, encargos e desligamento, eliminando passivos juridicos para o contratante.', 'rmfacilities-onepage' ); ?></dd>
+				<dt><button class="faq-question" type="button" aria-expanded="false" aria-controls="faq-answer-4"><?php esc_html_e( 'A empresa assume as obrigações trabalhistas dos colaboradores?', 'rmfacilities-onepage' ); ?></button></dt>
+				<dd class="faq-answer" id="faq-answer-4" hidden><?php esc_html_e( 'A RM Facilities LTDA é empregadora dos colaboradores alocados e administra as obrigações trabalhistas correspondentes ao vínculo de emprego.', 'rmfacilities-onepage' ); ?></dd>
 			</div>
 			<div class="faq-item">
-				<dt class="faq-question"><?php esc_html_e( 'O que acontece se um colaborador faltar?', 'rmfacilities-onepage' ); ?></dt>
-				<dd class="faq-answer"><?php esc_html_e( 'Mantemos um banco de profissionais treinados e disponiveis para cobertura imediata. Nosso plano de contingencia garante que seu servico nao seja interrompido por falta ou imprevistos.', 'rmfacilities-onepage' ); ?></dd>
+				<dt><button class="faq-question" type="button" aria-expanded="false" aria-controls="faq-answer-5"><?php esc_html_e( 'O que acontece se um colaborador faltar?', 'rmfacilities-onepage' ); ?></button></dt>
+				<dd class="faq-answer" id="faq-answer-5" hidden><?php esc_html_e( 'A cobertura de ausências é tratada conforme o plano de contingência e as condições definidas na proposta contratada.', 'rmfacilities-onepage' ); ?></dd>
 			</div>
 			<div class="faq-item">
-				<dt class="faq-question"><?php esc_html_e( 'Como e feito o acompanhamento da qualidade?', 'rmfacilities-onepage' ); ?></dt>
-				<dd class="faq-answer"><?php esc_html_e( 'Realizamos supervisao presencial periodica, coletamos indicadores de satisfacao e enviamos relatorios de desempenho ao contratante. Cada cliente tem um gestor de conta dedicado para comunicacao direta.', 'rmfacilities-onepage' ); ?></dd>
+				<dt><button class="faq-question" type="button" aria-expanded="false" aria-controls="faq-answer-6"><?php esc_html_e( 'Como é feito o acompanhamento da qualidade?', 'rmfacilities-onepage' ); ?></button></dt>
+				<dd class="faq-answer" id="faq-answer-6" hidden><?php esc_html_e( 'Os critérios de acompanhamento e a rotina de comunicação são alinhados com o contratante conforme o serviço e a proposta.', 'rmfacilities-onepage' ); ?></dd>
 			</div>
 		</dl>
 	</div>

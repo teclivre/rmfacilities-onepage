@@ -39,16 +39,19 @@ $rmf_cnpj        = get_theme_mod( 'rmf_company_cnpj', '39.416.796/0001-01' );
 
 		<div>
 			<h3><?php esc_html_e( 'Navegacao', 'rmfacilities-onepage' ); ?></h3>
-			<?php
-			wp_nav_menu(
-				array(
-					'theme_location' => 'footer',
-					'container'      => false,
-					'menu_class'     => 'footer-menu',
-					'fallback_cb'    => 'rmf_primary_menu_fallback',
-				)
-			);
-			?>
+			<nav aria-label="<?php esc_attr_e( 'Navegação do rodapé', 'rmfacilities-onepage' ); ?>">
+				<?php
+				wp_nav_menu(
+					array(
+						'theme_location' => 'footer',
+						'container'      => false,
+						'menu_id'        => 'footer-menu',
+						'menu_class'     => 'footer-menu',
+						'fallback_cb'    => 'rmf_primary_menu_fallback',
+					)
+				);
+				?>
+			</nav>
 		</div>
 	</div>
 

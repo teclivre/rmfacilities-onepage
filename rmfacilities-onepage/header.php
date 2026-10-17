@@ -46,7 +46,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			?>
 		</div>
 
-		<button class="menu-toggle" aria-expanded="false" aria-controls="primary-navigation">
+		<button class="menu-toggle" type="button" aria-label="<?php esc_attr_e( 'Abrir menu', 'rmfacilities-onepage' ); ?>" aria-expanded="false" aria-controls="primary-navigation">
 			<span></span><span></span><span></span>
 		</button>
 
@@ -56,6 +56,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				array(
 					'theme_location' => 'primary',
 					'container'      => false,
+					'menu_id'        => 'primary-menu',
 					'menu_class'     => 'menu',
 					'fallback_cb'    => 'rmf_primary_menu_fallback',
 				)
