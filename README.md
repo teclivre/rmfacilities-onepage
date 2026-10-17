@@ -22,6 +22,16 @@ Na ativação, o tema cria páginas iniciais para início, blog, agradecimento, 
 
 A página de política de privacidade inicial é apenas um ponto de partida. Revise-a para refletir os dados coletados pelo formulário, os serviços de terceiros usados e os canais de atendimento antes de considerá-la uma política completa.
 
+### Gerar ZIP para instalar uma atualização
+
+Depois de alterar o tema, gere o pacote para enviar pelo WordPress executando na raiz do repositório:
+
+```sh
+./scripts/gerar-zip-tema.sh
+```
+
+O script incrementa automaticamente o número de correção da versão no cabeçalho `Version` de `rmfacilities-onepage/style.css` (por exemplo, `1.3.0` para `1.3.1`), recria `rmfacilities-onepage.zip` com essa versão e mantém o diretório do tema sincronizado. Instale o ZIP em **Aparência → Temas → Adicionar novo → Enviar tema** e confirme a substituição/atualização quando solicitado. Inclua no commit os arquivos `style.css` e `rmfacilities-onepage.zip` gerados; assim o número da versão também fica registrado no repositório.
+
 ## SEO e Google
 
 ### Rank Math
