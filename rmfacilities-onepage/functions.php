@@ -216,18 +216,6 @@ function rmf_defer_scripts( $tag, $handle, $src ) {
 add_filter( 'script_loader_tag', 'rmf_defer_scripts', 10, 3 );
 
 /**
- * Mantém apenas o CSS essencial do Cookie Law Info (banner e botões).
- * Remove apenas folhas redundantes de GDPR/CCPA que não são usadas.
- */
-function rmf_dequeue_cli_css() {
-	wp_dequeue_style( 'cookie-law-info-gdpr' );
-	wp_deregister_style( 'cookie-law-info-gdpr' );
-}
-add_action( 'wp_enqueue_scripts', 'rmf_dequeue_cli_css', 9999 );
-
-
-
-/**
  * Remove scripts de terceiros que entram fora do pipeline de enqueue normal.
  * ob_start removido — conflitava com plugins de cache.
  */
@@ -544,10 +532,51 @@ function rmf_after_switch_theme_setup() {
 }
 add_action( 'after_switch_theme', 'rmf_after_switch_theme_setup' );
 
+function rmf_redirect_contact_form( $status = 'erro' ) {
+	$redirect_url = add_query_arg( 'status', sanitize_key( $status ), home_url( '/' ) );
+	wp_safe_redirect( $redirect_url . '#contato' );
+	exit;
+}
+
+function rmf_contact_rate_limit_reached() {
+	if ( empty( $_SERVER['REMOTE_ADDR'] ) ) {
+		return false;
+	}
+
+	$remote_addr = sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) );
+	$client_addr = $remote_addr;
+
+	if ( ! empty( $_SERVER['HTTP_CF_CONNECTING_IP'] ) && ! empty( $_SERVER['HTTP_CF_RAY'] ) ) {
+		$cloudflare_client = sanitize_text_field( wp_unslash( $_SERVER['HTTP_CF_CONNECTING_IP'] ) );
+		if ( false !== filter_var( $cloudflare_client, FILTER_VALIDATE_IP ) ) {
+			$client_addr = $cloudflare_client;
+		}
+	}
+
+	if ( false === filter_var( $client_addr, FILTER_VALIDATE_IP ) ) {
+		return false;
+	}
+
+	$transient   = 'rmf_contact_rate_' . hash_hmac( 'sha256', $client_addr, wp_salt( 'auth' ) );
+	$submissions = (int) get_transient( $transient );
+
+	if ( $submissions >= 5 ) {
+		return true;
+	}
+
+	set_transient( $transient, $submissions + 1, HOUR_IN_SECONDS );
+	return false;
+}
+
 function rmf_handle_contact_form_submission() {
 	if ( ! isset( $_POST['rmf_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['rmf_nonce'] ) ), 'rmf_contact_nonce' ) ) {
-		wp_safe_redirect( home_url( '/#contato?status=erro' ) );
-		exit;
+		rmf_redirect_contact_form();
+	}
+
+	$honeypot = isset( $_POST['rmf_website'] ) ? sanitize_text_field( wp_unslash( $_POST['rmf_website'] ) ) : '';
+	$started  = isset( $_POST['rmf_form_started'] ) ? absint( $_POST['rmf_form_started'] ) : 0;
+	if ( '' !== $honeypot || ( $started > 0 && time() - $started < 3 ) ) {
+		rmf_redirect_contact_form();
 	}
 
 	$fields = array(
@@ -562,9 +591,12 @@ function rmf_handle_contact_form_submission() {
 		'mensagem' => isset( $_POST['rmf_mensagem'] ) ? sanitize_textarea_field( wp_unslash( $_POST['rmf_mensagem'] ) ) : '',
 	);
 
-	if ( empty( $fields['nome'] ) || empty( $fields['email'] ) || empty( $fields['servico'] ) ) {
-		wp_safe_redirect( home_url( '/#contato?status=erro' ) );
-		exit;
+	if ( empty( $fields['nome'] ) || ! is_email( $fields['email'] ) || empty( $fields['servico'] ) ) {
+		rmf_redirect_contact_form();
+	}
+
+	if ( rmf_contact_rate_limit_reached() ) {
+		rmf_redirect_contact_form( 'limite' );
 	}
 
 	// Destinatário fixo — garante entrega mesmo se theme_mod estiver vazio

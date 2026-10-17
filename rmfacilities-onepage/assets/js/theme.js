@@ -4,6 +4,15 @@
 	const header = document.querySelector('.site-header');
 	const toggle = document.querySelector('.menu-toggle');
 	const nav = document.querySelector('.main-navigation');
+	const footer = document.querySelector('.site-footer');
+	const contactForm = document.querySelector('.rmf-contact-form');
+
+	if (contactForm) {
+		const startedField = contactForm.querySelector('[name="rmf_form_started"]');
+		if (startedField) {
+			startedField.value = String(Math.floor(Date.now() / 1000));
+		}
+	}
 
 	if (toggle && nav) {
 		toggle.addEventListener('click', function () {
@@ -152,6 +161,13 @@
 		});
 	}
 
+	if (header && footer && 'IntersectionObserver' in window) {
+		const footerObserver = new IntersectionObserver(function (entries) {
+			header.classList.toggle('is-footer-visible', entries[0].isIntersecting);
+		});
+		footerObserver.observe(footer);
+	}
+
 	window.addEventListener('scroll', function () {
 		if (header && window.scrollY > 10) {
 			header.classList.add('scrolled');
@@ -163,6 +179,52 @@
 	});
 
 	setActiveMenuLink();
+
+	function localizeCookieSettings() {
+		const modal = document.getElementById('cliSettingsPopup');
+		if (!modal) {
+			return;
+		}
+
+		const translations = [
+			['Privacy Overview', 'Visão geral de privacidade'],
+			[
+				'This website uses cookies to improve your experience while you navigate through the website.',
+				'Este site usa cookies para melhorar sua experiência durante a navegação. Os cookies classificados como necessários ficam armazenados no navegador, pois são essenciais para o funcionamento básico do site.'
+			],
+			['Necessary', 'Necessários'],
+			[
+				'Necessary cookies are absolutely essential for the website to function properly.',
+				'Os cookies necessários são essenciais para que o site funcione corretamente. Esta categoria inclui apenas cookies que garantem funcionalidades básicas e recursos de segurança. Esses cookies não armazenam informações pessoais.'
+			],
+			['Necessary', 'Necessários'],
+			['Non-necessary', 'Opcionais'],
+			[
+				'Any cookies that may not be particularly necessary for the website to function',
+				'Cookies opcionais podem ser usados para coletar dados de uso por meio de análises, anúncios ou conteúdos incorporados. Eles só são ativados após o seu consentimento.'
+			],
+			['SALVAR E ACEITAR', 'Salvar preferências']
+		];
+		const walker = document.createTreeWalker(modal, NodeFilter.SHOW_TEXT);
+		let node;
+
+		while ((node = walker.nextNode())) {
+			const original = node.nodeValue.trim();
+			const translation = translations.find(function (entry) {
+				return original === entry[0] || original.startsWith(entry[0]);
+			});
+
+			if (translation) {
+				node.nodeValue = node.nodeValue.replace(original, translation[1]);
+			}
+		}
+	}
+
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', localizeCookieSettings);
+	} else {
+		localizeCookieSettings();
+	}
 
 	// Accordion FAQ
 	document.querySelectorAll('.faq-question').forEach(function (button) {

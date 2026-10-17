@@ -182,10 +182,19 @@ foreach ( array_keys( rmf_service_pages() ) as $rmf_service_slug ) {
 					<div class="rmf-form-notice rmf-form-notice--error" role="alert">
 						⚠️ <strong>Ops!</strong> Ocorreu um erro. Tente novamente ou fale pelo WhatsApp.
 					</div>
+				<?php elseif ( 'limite' === $rmf_status ) : ?>
+					<div class="rmf-form-notice rmf-form-notice--error" role="alert">
+						⚠️ <strong>Envio temporariamente indisponível.</strong> Aguarde alguns minutos antes de tentar novamente ou fale pelo WhatsApp.
+					</div>
 				<?php endif; ?>
 				<form class="rmf-contact-form" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post">
 					<?php wp_nonce_field( 'rmf_contact_nonce', 'rmf_nonce' ); ?>
 					<input type="hidden" name="action" value="rmf_submit_contact">
+					<input type="hidden" name="rmf_form_started" value="">
+					<div class="rmf-honeypot" aria-hidden="true">
+						<label for="rmf-website"><?php esc_html_e( 'Deixe este campo vazio', 'rmfacilities-onepage' ); ?></label>
+						<input type="text" id="rmf-website" name="rmf_website" value="" tabindex="-1" autocomplete="off">
+					</div>
 
 					<div class="form-row form-row-2">
 						<div class="form-field">

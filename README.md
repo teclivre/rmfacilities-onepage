@@ -22,6 +22,10 @@ Na ativação, o tema cria páginas iniciais para início, blog, agradecimento, 
 
 A página de política de privacidade inicial é apenas um ponto de partida. Revise-a para refletir os dados coletados pelo formulário, os serviços de terceiros usados e os canais de atendimento antes de considerá-la uma política completa.
 
+O painel de preferências do Cookie Law Info/CookieYes depende dos estilos do próprio plugin, que não devem ser removidos. O tema aplica a identidade visual do site e traduz os textos padrão em inglês para português; textos personalizados no plugin são mantidos. Revise no painel as categorias e as descrições para que correspondam aos cookies e serviços realmente usados.
+
+O formulário de contato combina um campo honeypot, uma verificação de tempo quando JavaScript está disponível e um limite temporário de cinco envios por hora por visitante. O endereço usado no limite é armazenado como hash; quando a requisição chega pelo Cloudflare, o tema usa o IP informado por esse proxy. Isso reduz envios automatizados comuns sem exigir CAPTCHA nem bloquear o formulário quando JavaScript está desativado.
+
 ### Gerar ZIP para instalar uma atualização
 
 Depois de alterar o tema, gere o pacote para enviar pelo WordPress executando na raiz do repositório:
