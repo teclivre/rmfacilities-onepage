@@ -45,6 +45,10 @@ function rmf_enqueue_assets() {
 	wp_enqueue_style( 'rmf-style', get_stylesheet_uri(), array(), $version );
 	wp_enqueue_style( 'rmf-main', get_template_directory_uri() . '/assets/css/main.css', array( 'rmf-style' ), $version );
 	wp_enqueue_script( 'rmf-theme', get_template_directory_uri() . '/assets/js/theme.js', array(), $version, true );
+
+	if ( is_front_page() && rmf_turnstile_is_configured() ) {
+		wp_enqueue_script( 'rmf-cloudflare-turnstile', 'https://challenges.cloudflare.com/turnstile/v0/api.js', array(), null, true );
+	}
 }
 add_action( 'wp_enqueue_scripts', 'rmf_enqueue_assets' );
 
@@ -568,6 +572,56 @@ function rmf_contact_rate_limit_reached() {
 	return false;
 }
 
+function rmf_turnstile_is_configured() {
+	return defined( 'RMF_TURNSTILE_SITE_KEY' )
+		&& is_string( RMF_TURNSTILE_SITE_KEY )
+		&& '' !== trim( RMF_TURNSTILE_SITE_KEY )
+		&& defined( 'RMF_TURNSTILE_SECRET_KEY' )
+		&& is_string( RMF_TURNSTILE_SECRET_KEY )
+		&& '' !== trim( RMF_TURNSTILE_SECRET_KEY );
+}
+
+function rmf_verify_turnstile_response( $token ) {
+	if ( ! rmf_turnstile_is_configured() || '' === $token ) {
+		return false;
+	}
+
+	$verification = array(
+		'secret'   => RMF_TURNSTILE_SECRET_KEY,
+		'response' => $token,
+	);
+
+	if ( ! empty( $_SERVER['HTTP_CF_CONNECTING_IP'] ) && ! empty( $_SERVER['HTTP_CF_RAY'] ) ) {
+		$client_ip = sanitize_text_field( wp_unslash( $_SERVER['HTTP_CF_CONNECTING_IP'] ) );
+		if ( false !== filter_var( $client_ip, FILTER_VALIDATE_IP ) ) {
+			$verification['remoteip'] = $client_ip;
+		}
+	}
+
+	$response = wp_remote_post(
+		'https://challenges.cloudflare.com/turnstile/v0/siteverify',
+		array(
+			'timeout' => 5,
+			'body'    => $verification,
+		)
+	);
+
+	if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
+		return false;
+	}
+
+	$result = json_decode( wp_remote_retrieve_body( $response ), true );
+	if ( ! is_array( $result ) || empty( $result['success'] ) ) {
+		return false;
+	}
+
+	$site_host = wp_parse_url( home_url(), PHP_URL_HOST );
+	return is_string( $site_host )
+		&& isset( $result['hostname'] )
+		&& is_string( $result['hostname'] )
+		&& strtolower( $site_host ) === strtolower( $result['hostname'] );
+}
+
 function rmf_handle_contact_form_submission() {
 	if ( ! isset( $_POST['rmf_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['rmf_nonce'] ) ), 'rmf_contact_nonce' ) ) {
 		rmf_redirect_contact_form();
@@ -577,6 +631,15 @@ function rmf_handle_contact_form_submission() {
 	$started  = isset( $_POST['rmf_form_started'] ) ? absint( $_POST['rmf_form_started'] ) : 0;
 	if ( '' !== $honeypot || ( $started > 0 && time() - $started < 3 ) ) {
 		rmf_redirect_contact_form();
+	}
+
+	if ( rmf_turnstile_is_configured() ) {
+		$turnstile_token = isset( $_POST['cf-turnstile-response'] )
+			? sanitize_text_field( wp_unslash( $_POST['cf-turnstile-response'] ) )
+			: '';
+		if ( ! rmf_verify_turnstile_response( $turnstile_token ) ) {
+			rmf_redirect_contact_form( 'verificacao' );
+		}
 	}
 
 	$fields = array(

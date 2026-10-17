@@ -24,7 +24,19 @@ A página de política de privacidade inicial é apenas um ponto de partida. Rev
 
 O painel de preferências do Cookie Law Info/CookieYes depende dos estilos do próprio plugin, que não devem ser removidos. O tema aplica a identidade visual do site e traduz os textos padrão em inglês para português; textos personalizados no plugin são mantidos. Revise no painel as categorias e as descrições para que correspondam aos cookies e serviços realmente usados.
 
-O formulário de contato combina um campo honeypot, uma verificação de tempo quando JavaScript está disponível e um limite temporário de cinco envios por hora por visitante. O endereço usado no limite é armazenado como hash; quando a requisição chega pelo Cloudflare, o tema usa o IP informado por esse proxy. Isso reduz envios automatizados comuns sem exigir CAPTCHA nem bloquear o formulário quando JavaScript está desativado.
+O formulário combina um campo honeypot, uma verificação de tempo quando JavaScript está disponível e um limite de cinco envios por hora por visitante. Para ativar a verificação forte com Cloudflare Turnstile:
+
+1. Crie um widget Turnstile no painel Cloudflare e autorize o domínio do site.
+2. Copie as chaves do site e secreta para o `wp-config.php`, antes da linha de encerramento de edição, sem publicá-las no tema ou no Git:
+
+   ```php
+   define( 'RMF_TURNSTILE_SITE_KEY', 'SUA_CHAVE_DO_SITE' );
+   define( 'RMF_TURNSTILE_SECRET_KEY', 'SUA_CHAVE_SECRETA' );
+   ```
+
+3. Limpe o cache do site e teste o envio do formulário. Quando as duas chaves estão definidas, a validação é obrigatória no servidor; token ausente, inválido, indisponibilidade do serviço ou domínio divergente impedem o envio.
+
+O limite usa um hash do endereço do visitante; quando a requisição chega pelo Cloudflare, o tema também envia o IP validado pelo proxy à verificação. Sem as chaves do Turnstile, o honeypot, a validação de tempo e o limite continuam ativos, mas são proteções básicas e podem ser contornadas por bots mais avançados.
 
 ### Gerar ZIP para instalar uma atualização
 
@@ -34,7 +46,7 @@ Depois de alterar o tema, gere o pacote para enviar pelo WordPress executando na
 ./scripts/gerar-zip-tema.sh
 ```
 
-O script incrementa automaticamente o número de correção da versão no cabeçalho `Version` de `rmfacilities-onepage/style.css` (por exemplo, `1.3.4` para `1.3.5`) e gera o pacote com a versão no nome, como `rmfacilities-onepage-v1.3.5.zip`. Ele mantém o diretório do tema sincronizado e remove o antigo ZIP sem versão no nome para evitar confusão. Instale o ZIP recém-gerado em **Aparência → Temas → Adicionar novo → Enviar tema** e confirme a substituição/atualização quando solicitado. Inclua no commit os arquivos `style.css` e o ZIP versionado gerados.
+O script incrementa automaticamente o número de correção da versão no cabeçalho `Version` de `rmfacilities-onepage/style.css` (por exemplo, `X.Y.4` para `X.Y.5`) e gera o pacote com a versão no nome, como `rmfacilities-onepage-vX.Y.5.zip`. Ele mantém o diretório do tema sincronizado e remove o antigo ZIP sem versão no nome para evitar confusão. Instale o ZIP recém-gerado em **Aparência → Temas → Adicionar novo → Enviar tema** e confirme a substituição/atualização quando solicitado. Inclua no commit os arquivos `style.css` e o ZIP versionado gerados.
 
 ## SEO e Google
 

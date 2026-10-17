@@ -186,6 +186,10 @@ foreach ( array_keys( rmf_service_pages() ) as $rmf_service_slug ) {
 					<div class="rmf-form-notice rmf-form-notice--error" role="alert">
 						⚠️ <strong>Envio temporariamente indisponível.</strong> Tente novamente mais tarde ou fale pelo WhatsApp.
 					</div>
+				<?php elseif ( 'verificacao' === $rmf_status ) : ?>
+					<div class="rmf-form-notice rmf-form-notice--error" role="alert">
+						⚠️ <strong>Não foi possível validar o envio.</strong> Atualize a página, conclua a verificação antispam e tente novamente.
+					</div>
 				<?php endif; ?>
 				<form class="rmf-contact-form" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post">
 					<?php wp_nonce_field( 'rmf_contact_nonce', 'rmf_nonce' ); ?>
@@ -195,6 +199,11 @@ foreach ( array_keys( rmf_service_pages() ) as $rmf_service_slug ) {
 						<label for="rmf-website"><?php esc_html_e( 'Deixe este campo vazio', 'rmfacilities-onepage' ); ?></label>
 						<input type="text" id="rmf-website" name="rmf_website" value="" tabindex="-1" autocomplete="off">
 					</div>
+					<?php if ( rmf_turnstile_is_configured() ) : ?>
+						<div class="form-row">
+							<div class="cf-turnstile" data-sitekey="<?php echo esc_attr( RMF_TURNSTILE_SITE_KEY ); ?>" data-theme="dark"></div>
+						</div>
+					<?php endif; ?>
 
 					<div class="form-row form-row-2">
 						<div class="form-field">
