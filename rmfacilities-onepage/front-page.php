@@ -184,7 +184,7 @@ foreach ( array_keys( rmf_service_pages() ) as $rmf_service_slug ) {
 					</div>
 				<?php elseif ( 'limite' === $rmf_status ) : ?>
 					<div class="rmf-form-notice rmf-form-notice--error" role="alert">
-						⚠️ <strong>Envio temporariamente indisponível.</strong> Aguarde alguns minutos antes de tentar novamente ou fale pelo WhatsApp.
+						⚠️ <strong>Envio temporariamente indisponível.</strong> Tente novamente mais tarde ou fale pelo WhatsApp.
 					</div>
 				<?php endif; ?>
 				<form class="rmf-contact-form" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post">
