@@ -34,7 +34,7 @@ Depois de alterar o tema, gere o pacote para enviar pelo WordPress executando na
 ./scripts/gerar-zip-tema.sh
 ```
 
-O script incrementa automaticamente o número de correção da versão no cabeçalho `Version` de `rmfacilities-onepage/style.css` (por exemplo, `1.3.0` para `1.3.1`), recria `rmfacilities-onepage.zip` com essa versão e mantém o diretório do tema sincronizado. Instale o ZIP em **Aparência → Temas → Adicionar novo → Enviar tema** e confirme a substituição/atualização quando solicitado. Inclua no commit os arquivos `style.css` e `rmfacilities-onepage.zip` gerados; assim o número da versão também fica registrado no repositório.
+O script incrementa automaticamente o número de correção da versão no cabeçalho `Version` de `rmfacilities-onepage/style.css` (por exemplo, `1.3.4` para `1.3.5`) e gera o pacote com a versão no nome, como `rmfacilities-onepage-v1.3.5.zip`. Ele mantém o diretório do tema sincronizado e remove o antigo ZIP sem versão no nome para evitar confusão. Instale o ZIP recém-gerado em **Aparência → Temas → Adicionar novo → Enviar tema** e confirme a substituição/atualização quando solicitado. Inclua no commit os arquivos `style.css` e o ZIP versionado gerados.
 
 ## SEO e Google
 

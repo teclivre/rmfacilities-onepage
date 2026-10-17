@@ -4,7 +4,7 @@ set -euo pipefail
 repo_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 theme_dir="$repo_dir/rmfacilities-onepage"
 style_file="$theme_dir/style.css"
-archive_file="$repo_dir/rmfacilities-onepage.zip"
+legacy_archive="$repo_dir/rmfacilities-onepage.zip"
 
 if [[ ! -f "$style_file" ]]; then
 	printf 'Erro: arquivo de tema nao encontrado: %s\n' "$style_file" >&2
@@ -18,6 +18,7 @@ if [[ ! "$version" =~ ^([0-9]+)\.([0-9]+)\.([0-9]+)$ ]]; then
 fi
 
 next_version="${BASH_REMATCH[1]}.${BASH_REMATCH[2]}.$((${BASH_REMATCH[3]} + 1))"
+archive_file="$repo_dir/rmfacilities-onepage-v${next_version}.zip"
 temporary_dir="$(mktemp -d)"
 trap 'rm -rf -- "$temporary_dir"' EXIT
 
@@ -43,6 +44,7 @@ awk -v next_version="$next_version" '
 
 cp "$staged_theme/style.css" "$style_file"
 mv "$temporary_dir/rmfacilities-onepage.zip" "$archive_file"
+rm -f -- "$legacy_archive"
 
 printf 'Tema atualizado para a versao %s.\n' "$next_version"
 printf 'Arquivo pronto para instalar: %s\n' "$archive_file"
