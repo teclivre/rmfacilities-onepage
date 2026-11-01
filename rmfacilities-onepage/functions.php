@@ -629,7 +629,7 @@ function rmf_handle_contact_form_submission() {
 
 	$honeypot = isset( $_POST['rmf_website'] ) ? sanitize_text_field( wp_unslash( $_POST['rmf_website'] ) ) : '';
 	$started  = isset( $_POST['rmf_form_started'] ) ? absint( $_POST['rmf_form_started'] ) : 0;
-	if ( '' !== $honeypot || ( $started > 0 && time() - $started < 3 ) ) {
+	if ( '' !== $honeypot || 0 === $started || $started > time() || time() - $started < 3 ) {
 		rmf_redirect_contact_form();
 	}
 

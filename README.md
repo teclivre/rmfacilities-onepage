@@ -24,7 +24,7 @@ A página de política de privacidade inicial é apenas um ponto de partida. Rev
 
 O painel de preferências do Cookie Law Info/CookieYes depende dos estilos do próprio plugin, que não devem ser removidos. O tema aplica a identidade visual do site e traduz os textos padrão em inglês para português; textos personalizados no plugin são mantidos. Revise no painel as categorias e as descrições para que correspondam aos cookies e serviços realmente usados.
 
-O formulário combina um campo honeypot, uma verificação de tempo quando JavaScript está disponível e um limite de cinco envios por hora por visitante. Para ativar a verificação forte com Cloudflare Turnstile:
+O formulário combina um campo honeypot, uma verificação obrigatória de tempo (pelo menos três segundos, com JavaScript habilitado) e um limite de cinco envios por hora por visitante. Envios sem o carimbo de tempo ou com horário inválido são rejeitados. Essas medidas básicas podem ser contornadas por bots mais avançados. Para ativar a verificação forte com Cloudflare Turnstile:
 
 1. Crie um widget Turnstile no painel Cloudflare e autorize o domínio do site.
 2. Copie as chaves do site e secreta para o `wp-config.php`, antes da linha de encerramento de edição, sem publicá-las no tema ou no Git:
